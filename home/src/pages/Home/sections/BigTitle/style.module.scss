@@ -1,0 +1,34 @@
+$wrapperHeight: 400px;
+$logoSize: $wrapperHeight * (2/3);
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: $wrapperHeight;
+  // background-color: #dddddd;
+  overflow: hidden; // for BFC
+}
+
+.content {
+  display: flex;
+}
+
+.logo {
+  margin-right: 40px;
+  width: $logoSize;
+  height: $logoSize;
+  background: url('../../../../assets/logo.png') center/contain no-repeat;
+}
+
+.desc {
+  align-self: center;
+  h1 {
+    font-size: 80px;
+    margin: 0 0 30px;
+  }
+  p {
+    margin: 0;
+    font-size: 40px;
+  }
+}
