@@ -6,6 +6,8 @@
 import React from 'react';
 
 import BigTitle from './sections/BigTitle';
+import Features from './sections/Features';
+import Installation from './sections/Installation';
 
 import c from './style.module.scss';
 
@@ -14,6 +16,9 @@ const Home = (): JSX.Element => {
     <div className={c.wrapper}>
       <BigTitle />
       <hr />
+      <Features />
+      <hr />
+      <Installation />
     </div>
   );
 };
