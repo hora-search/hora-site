@@ -10,3 +10,4 @@ Cargo.lock
 **/*.rs.bk
 demos/Cargo.lock
 demos/target
+*.json
