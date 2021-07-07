@@ -4,31 +4,35 @@ use hora;
 use hora::core::ann_index::ANNIndex;
 use rand::distributions::{Alphanumeric, Standard, Uniform};
 use rand::{thread_rng, Rng};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fs::File;
+use std::io::Read;
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct WineReviewsSearchItem {
     embedding: Vec<f32>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct WineReviewsSearchResp {
     resp: Vec<WineReviewsSearchItem>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct PicSearchItem {
     pic_name: String,
+    #[serde(default)]
     pic_url: String,
     embedding: Vec<f32>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct PicSearchResp {
     resp: Vec<PicSearchItem>,
 }
 
+#[derive(Clone, Debug)]
 struct PicItem {
     pic_name: String,
     pic_url: String,
@@ -56,12 +60,52 @@ struct ServingData {
 }
 
 fn prepare_data() -> ServingData {
+    let mut indices: HashMap<String, Box<hora::index::hnsw_idx::HNSWIndex<f32, String>>> =
+        HashMap::new();
+    indices.insert(
+        "celebrity".to_string(),
+        Box::new(hora::index::hnsw_idx::HNSWIndex::<f32, String>::new(
+            786,
+            &hora::index::hnsw_params::HNSWParams::<f32>::default(),
+        )),
+    );
+
+    let mut file = File::open("celebrity_emebeddings.json").unwrap();
+    let mut data = String::new();
+    file.read_to_string(&mut data).unwrap();
+
+    let celebrity_info: Vec<PicSearchItem> =
+        serde_json::from_str(&data).expect("JSON was not well-formatted");
+    let mut celebrity_data = HashMap::new();
+    let mut celebrity_key_list = Vec::new();
+
+    celebrity_info.iter().for_each(|x| {
+        celebrity_data.insert(
+            x.pic_name.clone(),
+            PicItem {
+                pic_name: x.pic_name.clone(),
+                pic_url: "".to_string(),
+                embedding: x.embedding.clone(),
+            },
+        );
+        celebrity_key_list.push(x.pic_name.clone());
+        indices
+            .get_mut("celebrity")
+            .unwrap()
+            .add(&x.embedding, x.pic_name.clone());
+    });
+    indices
+        .get_mut("celebrity")
+        .unwrap()
+        .build(hora::core::metrics::Metric::Euclidean);
+
+    println!("finish preparing");
     ServingData {
-        indices: HashMap::new(),
+        indices: indices,
         wine_reviews_data: HashMap::new(),
         wine_reviews_key_list: Vec::new(),
-        celebrity_data: HashMap::new(),
-        celebrity_key_list: Vec::new(),
+        celebrity_data: celebrity_data,
+        celebrity_key_list: celebrity_key_list.clone(),
         cats_data: HashMap::new(),
         cats_key_list: Vec::new(),
     }
@@ -173,6 +217,8 @@ async fn main() -> std::io::Result<()> {
             .data(prepare_data())
             .service(cat_search)
             .service(celebrity_search)
+            .service(celebrity_random)
+            .service(cat_random)
     })
     .bind("127.0.0.1:8080")?
     .run()
