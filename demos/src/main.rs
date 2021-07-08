@@ -32,6 +32,11 @@ struct PicSearchResp {
     resp: Vec<PicSearchItem>,
 }
 
+#[derive(Deserialize)]
+struct SearchQuery {
+    query: String,
+}
+
 #[derive(Clone, Debug)]
 struct PicItem {
     pic_name: String,
@@ -59,13 +64,13 @@ struct ServingData {
     cats_key_list: Vec<String>,
 }
 
-fn prepare_data() -> ServingData {
+fn prepare_data() -> web::Data<ServingData> {
     let mut indices: HashMap<String, Box<hora::index::hnsw_idx::HNSWIndex<f32, String>>> =
         HashMap::new();
     indices.insert(
         "celebrity".to_string(),
         Box::new(hora::index::hnsw_idx::HNSWIndex::<f32, String>::new(
-            786,
+            128,
             &hora::index::hnsw_params::HNSWParams::<f32>::default(),
         )),
     );
@@ -94,13 +99,14 @@ fn prepare_data() -> ServingData {
             .unwrap()
             .add(&x.embedding, x.pic_name.clone());
     });
+    println!("start build {:?} point", celebrity_key_list.len());
     indices
         .get_mut("celebrity")
         .unwrap()
         .build(hora::core::metrics::Metric::Euclidean);
 
     println!("finish preparing");
-    ServingData {
+    web::Data::new(ServingData {
         indices: indices,
         wine_reviews_data: HashMap::new(),
         wine_reviews_key_list: Vec::new(),
@@ -108,7 +114,7 @@ fn prepare_data() -> ServingData {
         celebrity_key_list: celebrity_key_list.clone(),
         cats_data: HashMap::new(),
         cats_key_list: Vec::new(),
-    }
+    })
 }
 
 #[get("/cat_search")]
@@ -182,11 +188,11 @@ async fn celebrity_random(data: web::Data<ServingData>) -> Result<HttpResponse> 
 
 #[get("/celebrity_search")]
 async fn celebrity_search(
-    query: web::Query<String>,
+    query: web::Query<SearchQuery>,
     data: web::Data<ServingData>,
 ) -> Result<HttpResponse> {
     static k: usize = 5;
-    match data.celebrity_data.get(&query.clone()) {
+    match data.celebrity_data.get(&query.query.clone()) {
         Some(item) => {
             let resp_list = data
                 .indices
@@ -214,12 +220,13 @@ async fn celebrity_search(
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
-            .data(prepare_data())
+            .app_data(prepare_data())
             .service(cat_search)
             .service(celebrity_search)
             .service(celebrity_random)
             .service(cat_random)
     })
+    .workers(1)
     .bind("127.0.0.1:8080")?
     .run()
     .await
