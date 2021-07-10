@@ -1,4 +1,4 @@
-@import 'src/shared.scss';
+@import 'styles/shared.scss';
 
 .wrapper {
   position: fixed;
@@ -30,7 +30,7 @@ $logoSize: 25px;
   margin-right: 10px;
   height: $logoSize;
   width: $logoSize;
-  background: url('../../assets/logo.svg') center/contain no-repeat;
+  background: url('../../public/logo.svg') center/contain no-repeat;
 }
 
 .linksWrapper {

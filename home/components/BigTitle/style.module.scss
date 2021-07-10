@@ -31,7 +31,7 @@ $logoSize: 400px;
 .logo {
   width: $logoSize;
   height: $logoSize;
-  background: url('../../../../assets/logo-vertical.svg') center/contain no-repeat;
+  background: url('../../public/logo-vertical.svg') center/contain no-repeat;
   filter: drop-shadow(6px 6px 0 #ffffffdd);
 }
 

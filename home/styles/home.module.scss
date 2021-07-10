@@ -1,4 +1,7 @@
+@import './shared.scss';
+
 .wrapper {
+  margin-top: $navHeight;
   padding-bottom: 60px;
 
   hr {
