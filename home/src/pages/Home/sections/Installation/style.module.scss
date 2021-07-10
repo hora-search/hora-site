@@ -1,13 +1,30 @@
 $cardMarginBottom: 30px;
 
 .wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  > * {
+    flex: none;
+  }
+
   padding: 40px 6%;
 }
 
 .title {
   margin: 0 0 40px;
-  font-size: 36px;
+  padding: 5px 10px;
+  color: #ffddb7;
+  font-size: 28px;
+  font-family: menlo, consolas, 'Courier New', Courier, monospace;
   text-align: center;
+  background-color: #84471f;
+  filter: drop-shadow(5px 5px 0 #84471f66);
+}
+
+.languageShowcase {
+  align-self: stretch;
 }
 
 .languageSwitcher {
@@ -17,10 +34,11 @@ $cardMarginBottom: 30px;
 
 .switcherItem {
   padding: 5px 10px;
-  width: 60px;
+  width: 80px;
   text-align: center;
   border: 1px solid currentColor;
   cursor: pointer;
+  font-family: menlo, consolas, 'Courier New', Courier, monospace;
 
   & + & {
     margin-left: -1px;
@@ -32,15 +50,15 @@ $cardMarginBottom: 30px;
 }
 
 .activeLanguage {
-  background-color: #000000;
-  color: #ffffff;
-  border-color: #000000;
+  background-color: #63341a;
+  color: #ffddb7;
+  border-color: #63341a;
 }
 
 .codeShowcase {
   position: relative;
   padding: 20px;
-  border: 1px solid #000000;
+  border: 1px solid #63341a;
   border-radius: 4px;
   // white-space: pre;
   // font-family: monospace;
@@ -60,7 +78,7 @@ $cardMarginBottom: 30px;
   &::before {
     content: counter(lineCounter);
     margin-right: 10px;
-    color: #999999;
+    color: #63341a66;
     user-select: none;
   }
 }
@@ -71,11 +89,8 @@ $cardMarginBottom: 30px;
   top: -1px;
   right: -1px;
   padding: 5px 10px;
-  background-color: #ffffff;
+  color: #63341a;
+  background-color: transparent;
   border: 1px solid currentColor;
   cursor: pointer;
-
-  &:active{
-    background-color: #eeeeee;
-  }
 }

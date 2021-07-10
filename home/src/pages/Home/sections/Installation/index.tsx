@@ -30,28 +30,34 @@ const Installation = (): JSX.Element => {
   return (
     <div className={c.wrapper}>
       <h2 className={c.title}>Installation</h2>
-      <div className={c.languageSwitcher}>
-        {languageGuides.map(({ language }) => {
-          const isActive = activeLanguage === language;
-          return (
-            <label className={`${c.switcherItem} ${isActive ? c.activeLanguage : ''}`}>
-              <input checked={isActive} onChange={() => setActiveLanguage(language)} type="radio" />
-              {language}
-            </label>
-          );
-        })}
+      <div className={c.languageShowcase}>
+        <div className={c.languageSwitcher}>
+          {languageGuides.map(({ language }) => {
+            const isActive = activeLanguage === language;
+            return (
+              <label className={`${c.switcherItem} ${isActive ? c.activeLanguage : ''}`}>
+                <input
+                  checked={isActive}
+                  onChange={() => setActiveLanguage(language)}
+                  type="radio"
+                />
+                {language}
+              </label>
+            );
+          })}
+        </div>
+        <pre className={c.codeShowcase}>
+          {curCodeLines.map((line) => (
+            <code className={c.codeLine}>{line}</code>
+          ))}
+          <button
+            className={c.copyBtn}
+            onClick={() => navigator.clipboard.writeText(curCodeLines.join('\n'))}
+          >
+            Copy
+          </button>
+        </pre>
       </div>
-      <pre className={c.codeShowcase}>
-        {curCodeLines.map((line) => (
-          <code className={c.codeLine}>{line}</code>
-        ))}
-        <button
-          className={c.copyBtn}
-          onClick={() => navigator.clipboard.writeText(curCodeLines.join('\n'))}
-        >
-          Copy
-        </button>
-      </pre>
     </div>
   );
 };

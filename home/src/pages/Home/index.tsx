@@ -15,9 +15,7 @@ const Home = (): JSX.Element => {
   return (
     <div className={c.wrapper}>
       <BigTitle />
-      <hr />
       <Features />
-      <hr />
       <Installation />
     </div>
   );

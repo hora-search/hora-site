@@ -10,17 +10,18 @@
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 20px;
+  padding: 0 5%;
   height: $navHeight;
 
-  background-color: #ffffff;
-
-  border-bottom: 1px solid #cccccc;
+  // border-bottom: 1px solid #cccccc;
 }
 
 .title {
   display: flex;
   align-items: center;
+  color: #63341a;
+  font-weight: 700;
+  cursor: zoom-in;
 }
 
 $logoSize: 25px;
@@ -29,11 +30,21 @@ $logoSize: 25px;
   margin-right: 10px;
   height: $logoSize;
   width: $logoSize;
-  background: url('../../assets/logo.png') center/contain no-repeat;
+  background: url('../../assets/logo.svg') center/contain no-repeat;
 }
 
 .linksWrapper {
   > * + * {
     margin-left: 20px;
+  }
+}
+
+.link {
+  color: #63341a;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    opacity: 0.5;
   }
 }
