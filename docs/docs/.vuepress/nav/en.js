@@ -1,19 +1,7 @@
 module.exports = [
   {
-    text: 'Guide',
-    link: '/guide/'
-  },
-  {
-    text: 'Config Reference',
-    link: '/config/'
-  },
-  {
-    text: 'Plugin',
-    link: '/plugin/'
-  },
-  {
-    text: 'Theme',
-    link: '/theme/'
+    text: 'Document',
+    link: '/doc/'
   },
   {
     text: 'Learn More',

@@ -5,13 +5,13 @@ module.exports = ctx => ({
   locales: {
     '/': {
       lang: 'en-US',
-      title: 'VuePress',
-      description: 'Vue-powered Static Site Generator'
+      title: 'Hora Search',
+      description: 'Hora Search Everywhere, a light approximate nearest neighbor search library in rust'
     },
     '/zh/': {
       lang: 'zh-CN',
-      title: 'VuePress',
-      description: 'Vue 驱动的静态网站生成器'
+      title: 'Hora Search',
+      description: 'Hora Search Everywhere, a light approximate nearest neighbor search library in rust'
     }
   },
   head: [
@@ -30,14 +30,6 @@ module.exports = ctx => ({
     repo: 'vuejs/vuepress',
     editLinks: true,
     docsDir: 'packages/docs/docs',
-    // #697 Provided by the official algolia team.
-    algolia: ctx.isProd ? ({
-      apiKey: '3a539aab83105f01761a137c61004d85',
-      indexName: 'vuepress',
-      algoliaOptions: {
-        facetFilters: ['tags:v1']
-      }
-    }) : null,
     smoothScroll: true,
     locales: {
       '/': {
@@ -48,24 +40,7 @@ module.exports = ctx => ({
         lastUpdated: 'Last Updated',
         nav: require('./nav/en'),
         sidebar: {
-          '/api/': getApiSidebar(),
-          '/guide/': getGuideSidebar('Guide', 'Advanced'),
-          '/plugin/': getPluginSidebar('Plugin', 'Introduction', 'Official Plugins'),
-          '/theme/': getThemeSidebar('Theme', 'Introduction')
-        }
-      },
-      '/zh/': {
-        label: '简体中文',
-        selectText: '选择语言',
-        ariaLabel: '选择语言',
-        editLinkText: '在 GitHub 上编辑此页',
-        lastUpdated: '上次更新',
-        nav: require('./nav/zh'),
-        sidebar: {
-          '/zh/api/': getApiSidebar(),
-          '/zh/guide/': getGuideSidebar('指南', '深入'),
-          '/zh/plugin/': getPluginSidebar('插件', '介绍', '官方插件'),
-          '/zh/theme/': getThemeSidebar('主题', '介绍')
+          '/doc/': getGuideSidebar('Baisc', 'Indexes'),
         }
       }
     }
@@ -98,13 +73,6 @@ module.exports = ctx => ({
   ]
 })
 
-function getApiSidebar () {
-  return [
-    'cli',
-    'node'
-  ]
-}
-
 function getGuideSidebar (groupA, groupB) {
   return [
     {
@@ -130,52 +98,6 @@ function getGuideSidebar (groupA, groupB) {
         'permalinks',
         'markdown-slot',
         'global-computed'
-      ]
-    }
-  ]
-}
-
-const officalPlugins = fs
-  .readdirSync(path.resolve(__dirname, '../plugin/official'))
-  .map(filename => 'official/' + filename.slice(0, -3))
-  .sort()
-
-function getPluginSidebar (pluginTitle, pluginIntro, officialPluginTitle) {
-  return [
-    {
-      title: pluginTitle,
-      collapsable: false,
-      children: [
-        ['', pluginIntro],
-        'using-a-plugin',
-        'writing-a-plugin',
-        'life-cycle',
-        'option-api',
-        'context-api'
-      ]
-    },
-    {
-      title: officialPluginTitle,
-      collapsable: false,
-      children: officalPlugins
-    }
-  ]
-}
-
-function getThemeSidebar (groupA, introductionA) {
-  return [
-    {
-      title: groupA,
-      collapsable: false,
-      sidebarDepth: 2,
-      children: [
-        ['', introductionA],
-        'using-a-theme',
-        'writing-a-theme',
-        'option-api',
-        'default-theme-config',
-        'blog-theme',
-        'inheritance'
       ]
     }
   ]
