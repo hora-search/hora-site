@@ -7,14 +7,10 @@ module.exports = ctx => ({
       lang: 'en-US',
       title: 'Hora Search',
       description: 'Hora Search Everywhere, a light approximate nearest neighbor search library in rust'
-    },
-    '/zh/': {
-      lang: 'zh-CN',
-      title: 'Hora Search',
-      description: 'Hora Search Everywhere, a light approximate nearest neighbor search library in rust'
     }
   },
   head: [
+    
     ['link', { rel: 'icon', href: `/logo.png` }],
     ['link', { rel: 'manifest', href: '/manifest.json' }],
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],
@@ -40,13 +36,22 @@ module.exports = ctx => ({
         lastUpdated: 'Last Updated',
         nav: require('./nav/en'),
         sidebar: {
-          '/doc/': getGuideSidebar('Baisc', 'Indexes'),
+          '/doc/': getGuideSidebar('Basic', 'Indexes'),
         }
       }
     }
   },
   plugins: [
     ['@vuepress/back-to-top', true],
+    [
+      'vuepress-plugin-mathjax',
+      {
+        target: 'svg',
+        macros: {
+          '*': '\\times',
+        },
+      },
+    ],
     ['@vuepress/pwa', {
       serviceWorker: true,
       updatePopup: true
@@ -69,7 +74,6 @@ module.exports = ctx => ({
   ],
   extraWatchFiles: [
     '.vuepress/nav/en.js',
-    '.vuepress/nav/zh.js'
   ]
 })
 
@@ -80,24 +84,20 @@ function getGuideSidebar (groupA, groupB) {
       collapsable: false,
       children: [
         '',
-        'getting-started',
-        'directory-structure',
-        'basic-config',
-        'assets',
-        'markdown',
-        'using-vue',
-        'i18n',
-        'deploy'
+        'install',
+        'benchmark',
+        'example'
       ]
     },
     {
       title: groupB,
       collapsable: false,
       children: [
-        'frontmatter',
-        'permalinks',
-        'markdown-slot',
-        'global-computed'
+        'BruteForceIndex',
+        'HNSWIndex',
+        'SSGIndex',
+        'PQIndex',
+        'PQIVFIndex',
       ]
     }
   ]
