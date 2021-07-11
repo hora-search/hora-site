@@ -35,7 +35,7 @@ $logoSizeSmall: 300px;
   width: $logoSize;
   height: $logoSize;
   background: url('../../public/logo-vertical.svg') center/contain no-repeat;
-  filter: drop-shadow(4px 4px 0 #ff4d76);
+  filter: drop-shadow(6px 6px 0 $shadowColor);
 
   @media (max-width: $screenSmall) {
     width: $logoSizeSmall;
@@ -48,5 +48,5 @@ $logoSizeSmall: 300px;
   font-size: 18px;
   font-family: menlo, consolas, 'Courier New', Courier, monospace;
   font-weight: 700;
-  filter: drop-shadow(3px 3px 0 #ffffffdd);
+  filter: drop-shadow(2px 2px 0 $shadowColor);
 }
