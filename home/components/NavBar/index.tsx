@@ -20,7 +20,7 @@ const NavBar = (): JSX.Element => {
       </div>
       <div className={c.linksWrapper}>
         {links.map(({ text, href }) => (
-          <a className={c.link} href={href}>{text}</a>
+          <a key={text} className={c.link} href={href}>{text}</a>
         ))}
       </div>
     </div>

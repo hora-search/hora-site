@@ -17,7 +17,7 @@ const features: { title: string; desc: string; img?: string }[] = [
   },
   {
     title: 'Performant',
-    desc: 'Taichi\'s Just-In-Time compiler offloads compute-intensive tasks to multi-core CPUs and massively parallel GPUs. The Taichi language design allows effective performance optimizations by the Taichi compiler.',
+    desc: "Taichi's Just-In-Time compiler offloads compute-intensive tasks to multi-core CPUs and massively parallel GPUs. The Taichi language design allows effective performance optimizations by the Taichi compiler.",
   },
   {
     title: 'Feature 4',
@@ -45,6 +45,7 @@ const Features = (): JSX.Element => {
       <div className={c.featureList} style={{ marginRight: -FEATURE_MARGIN }}>
         {features.map(({ title, desc, img }) => (
           <div
+            key={title}
             className={c.card}
             style={{ width: `calc(${FEATURE_WIDTH_PERCENT}% - ${FEATURE_MARGIN}px)` }}
           >

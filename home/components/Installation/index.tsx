@@ -35,7 +35,10 @@ const Installation = (): JSX.Element => {
           {languageGuides.map(({ language }) => {
             const isActive = activeLanguage === language;
             return (
-              <label className={`${c.switcherItem} ${isActive ? c.activeLanguage : ''}`}>
+              <label
+                key={language}
+                className={`${c.switcherItem} ${isActive ? c.activeLanguage : ''}`}
+              >
                 <input
                   checked={isActive}
                   onChange={() => setActiveLanguage(language)}
@@ -47,8 +50,10 @@ const Installation = (): JSX.Element => {
           })}
         </div>
         <pre className={c.codeShowcase}>
-          {curCodeLines.map((line) => (
-            <code className={c.codeLine}>{line}</code>
+          {curCodeLines.map((line, index) => (
+            <code key={index} className={c.codeLine}>
+              {line}
+            </code>
           ))}
           <button
             className={c.copyBtn}
