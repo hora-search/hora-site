@@ -35,7 +35,7 @@ $logoSizeSmall: 300px;
   width: $logoSize;
   height: $logoSize;
   background: url('../../public/logo-vertical.svg') center/contain no-repeat;
-  filter: drop-shadow(6px 6px 0 #ffffffdd);
+  filter: drop-shadow(4px 4px 0 #ff4d76);
 
   @media (max-width: $screenSmall) {
     width: $logoSizeSmall;

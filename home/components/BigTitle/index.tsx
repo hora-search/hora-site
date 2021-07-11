@@ -10,7 +10,7 @@ const BigTitle = (): JSX.Element => {
   return (
     <div className={c.wrapper}>
       <div className={c.logo}></div>
-      <p className={c.desc}>Hora search everywhere.</p>
+      <p className={c.desc}>Hora search everywhere!</p>
     </div>
   );
 };
