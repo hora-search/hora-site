@@ -10,7 +10,12 @@ module.exports = ctx => ({
     }
   },
   head: [
-    
+    ['script', {async: true, src: "https://www.googletagmanager.com/gtag/js?id=G-ZCQDT118MM"}],
+    ['script', {}, `window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-ZCQDT118MM');`],
     ['link', { rel: 'icon', href: `/logo.png` }],
     ['link', { rel: 'manifest', href: '/manifest.json' }],
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],
