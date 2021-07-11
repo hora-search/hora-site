@@ -14,13 +14,13 @@ const links: { text: string; href: string }[] = [
 const NavBar = (): JSX.Element => {
   return (
     <div className={c.wrapper}>
-      <div className={c.title}>
+      <div className={c.title} title="Hora search everywhere!">
         <div className={c.logo} />
         Hora Search
       </div>
       <div className={c.linksWrapper}>
         {links.map(({ text, href }) => (
-          <a href={href}>{text}</a>
+          <a className={c.link} href={href}>{text}</a>
         ))}
       </div>
     </div>
