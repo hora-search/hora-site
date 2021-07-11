@@ -28,7 +28,7 @@ module.exports = ctx => ({
   ],
   theme: '@vuepress/vue',
   themeConfig: {
-    repo: 'vuejs/vuepress',
+    repo: 'hora-search/hora',
     editLinks: true,
     docsDir: 'packages/docs/docs',
     smoothScroll: true,
