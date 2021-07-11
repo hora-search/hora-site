@@ -40,6 +40,7 @@ $logoSizeSmall: 300px;
   @media (max-width: $screenSmall) {
     width: $logoSizeSmall;
     height: $logoSizeSmall;
+    filter: drop-shadow(4px 4px 0 $shadowColor);
   }
 }
 
