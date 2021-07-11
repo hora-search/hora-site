@@ -6,7 +6,7 @@
 import React from 'react';
 import c from './style.module.scss';
 
-const features: { title: string; desc: string; img?: string }[] = [
+const features: { title: string; desc: React.ReactNode; img?: string }[] = [
   {
     title: 'Portable 💼',
     desc: <ul>
