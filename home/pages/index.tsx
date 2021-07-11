@@ -17,7 +17,7 @@ import c from '../styles/home.module.scss';
 const Header = (): JSX.Element => {
   return (
     <Head>
-      <title>Hora Search Everywhere</title>
+      <title>Hora | Hora Search Everywhere</title>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"></meta>
       <meta data-react-helmet="true" name="keywords" content="Hora, Approximate Nearest Neighbor Search"></meta>
