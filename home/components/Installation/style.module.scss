@@ -23,7 +23,7 @@ $cardMarginBottom: 30px;
   filter: drop-shadow(5px 5px 0 #84471f66);
 }
 
-.languageShowcase {
+.content {
   align-self: stretch;
 }
 
@@ -59,14 +59,19 @@ $cardMarginBottom: 30px;
   padding: 20px;
   border: 1px solid #63341a;
   border-radius: 4px;
-  // white-space: pre;
-  // font-family: monospace;
-  counter-reset: lineCounter;
-  overflow: auto;
+  overflow: hidden;
 
   &:hover .copyBtn {
     display: block;
   }
+}
+
+.codeBlock {
+  margin: 0;
+  // white-space: pre;
+  // font-family: monospace;
+  counter-reset: lineCounter;
+  overflow: auto;
 }
 
 .codeLine {

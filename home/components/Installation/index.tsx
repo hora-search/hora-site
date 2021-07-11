@@ -9,11 +9,11 @@ import c from './style.module.scss';
 const languageGuides: { language: string; lines: string[] }[] = [
   {
     language: 'Rust',
-    lines: ["[dependencies]", 'hora = "0.1.0"'],
+    lines: ['[dependencies]', 'hora = "0.1.0"'],
   },
   {
     language: 'Python',
-    lines: ["$ pip install hora"],
+    lines: ['$ pip install hora'],
   },
   {
     language: 'Build From Source',
@@ -30,7 +30,7 @@ const Installation = (): JSX.Element => {
   return (
     <div className={c.wrapper}>
       <h2 className={c.title}>Installation</h2>
-      <div className={c.languageShowcase}>
+      <div className={c.content}>
         <div className={c.languageSwitcher}>
           {languageGuides.map(({ language }) => {
             const isActive = activeLanguage === language;
@@ -49,19 +49,21 @@ const Installation = (): JSX.Element => {
             );
           })}
         </div>
-        <pre className={c.codeShowcase}>
-          {curCodeLines.map((line, index) => (
-            <code key={index} className={c.codeLine}>
-              {line}
-            </code>
-          ))}
+        <div className={c.codeShowcase}>
+          <pre className={c.codeBlock}>
+            {curCodeLines.map((line, index) => (
+              <code key={index} className={c.codeLine}>
+                {line}
+              </code>
+            ))}
+          </pre>
           <button
             className={c.copyBtn}
             onClick={() => navigator.clipboard.writeText(curCodeLines.join('\n'))}
           >
             Copy
           </button>
-        </pre>
+        </div>
       </div>
     </div>
   );
