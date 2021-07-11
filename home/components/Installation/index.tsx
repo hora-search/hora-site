@@ -8,16 +8,16 @@ import c from './style.module.scss';
 
 const languageGuides: { language: string; lines: string[] }[] = [
   {
-    language: 'Java',
-    lines: ["import HS from 'hora-search';", 'HS.calc();'],
+    language: 'Rust',
+    lines: ["[dependencies]", 'hora = "0.1.0"'],
   },
   {
     language: 'Python',
-    lines: ["from 'hora-search' import hs"],
+    lines: ["$ pip install hora"],
   },
   {
-    language: 'C',
-    lines: ['#include <hora-search.h>;'],
+    language: 'Build From Source',
+    lines: ['$ git clone https://github.com/hora-search/hora', '$ cargo build'],
   },
 ];
 

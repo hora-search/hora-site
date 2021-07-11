@@ -7,8 +7,8 @@ import React from 'react';
 import c from './style.module.scss';
 
 const links: { text: string; href: string }[] = [
-  { text: 'GitHub', href: 'https://github.com' },
-  { text: 'Documentation', href: '/documentation' },
+  { text: 'GitHub', href: 'https://github.com/hora-search/hora' },
+  { text: 'Documentation', href: '/doc' },
 ];
 
 const NavBar = (): JSX.Element => {
