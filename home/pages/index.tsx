@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import Script from 'next/script';
 
 import NavBar from '../components/NavBar';
 import BigTitle from '../components/BigTitle';
@@ -21,6 +22,14 @@ const Home = (): JSX.Element => {
         <Features />
         <Installation />
       </div>
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-ZCQDT118MM" />
+      <Script>{`
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-ZCQDT118MM');
+          `}</Script>
     </div>
   );
 };
