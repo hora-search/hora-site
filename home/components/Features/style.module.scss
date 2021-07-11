@@ -1,3 +1,5 @@
+@import 'styles/shared.scss';
+
 $cardMarginBottom: 30px;
 
 .wrapper {
@@ -9,7 +11,7 @@ $cardMarginBottom: 30px;
     flex: none;
   }
 
-  padding: 40px 6%;
+  padding: 40px 0;
 }
 
 .title {
@@ -33,7 +35,6 @@ $cardMarginBottom: 30px;
 }
 
 .card {
-  box-sizing: border-box;
   flex: none;
   margin-bottom: $cardMarginBottom;
   // padding: 20px;
@@ -45,6 +46,18 @@ $cardMarginBottom: 30px;
   //   transform: scale(1.02);
   //   box-shadow: 4px 4px 0 0 #301c1144, -3px -3px 0 0 #ffffff22;
   // }
+  width: calc(33% - 20px);
+
+  @media (max-width: $screenLarge) {
+    width: calc(50% - 25px);
+    .cardTitle {
+      text-align: center;
+    }
+  }
+
+  @media (max-width: $screenMedium) {
+    width: 100%;
+  }
 }
 
 .cardImg {

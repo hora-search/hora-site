@@ -1,4 +1,7 @@
+@import 'styles/shared.scss';
+
 $logoSize: 400px;
+$logoSizeSmall: 300px;
 
 @keyframes float {
   0% {
@@ -33,6 +36,11 @@ $logoSize: 400px;
   height: $logoSize;
   background: url('../../public/logo-vertical.svg') center/contain no-repeat;
   filter: drop-shadow(6px 6px 0 #ffffffdd);
+
+  @media (max-width: $screenSmall) {
+    width: $logoSizeSmall;
+    height: $logoSizeSmall;
+  }
 }
 
 .desc {
