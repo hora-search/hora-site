@@ -1,0 +1,53 @@
+@import 'styles/shared.scss';
+
+$logoSize: 400px;
+$logoSizeSmall: 300px;
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 100px 0 50px;
+  // background-color: #dddddd;
+  overflow: hidden; // for BFC
+  animation: float 1.5s linear infinite;
+}
+
+.logo {
+  width: $logoSize;
+  height: $logoSize;
+  background: url('../../public/logo-vertical.svg') center/contain no-repeat;
+  filter: drop-shadow(6px 6px 0 $shadowColor);
+
+  @media (max-width: $screenSmall) {
+    width: $logoSizeSmall;
+    height: $logoSizeSmall;
+    filter: drop-shadow(4px 4px 0 $shadowColor);
+  }
+}
+
+.desc {
+  margin: 20px 0 0;
+  font-size: 18px;
+  font-family: menlo, consolas, 'Courier New', Courier, monospace;
+  font-weight: 700;
+  filter: drop-shadow(2px 2px 0 $shadowColor);
+}

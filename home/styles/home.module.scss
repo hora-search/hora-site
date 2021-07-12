@@ -1,0 +1,13 @@
+@import 'styles/shared.scss';
+
+.wrapper {
+  margin: $navHeight auto 0;
+  padding: 0 6% 60px;
+  max-width: $widthMax;
+
+  hr {
+    width: 90%;
+    border: none;
+    border-bottom: 1px solid #cccccc;
+  }
+}
