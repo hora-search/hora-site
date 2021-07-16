@@ -1,6 +1,8 @@
 @import 'styles/shared.scss';
 
 $cardMarginBottom: 30px;
+$logoWidth: 500px;
+$logoHeight: 408px;
 
 .wrapper {
     display: flex;
@@ -59,3 +61,19 @@ $cardMarginBottom: 30px;
     font-weight: normal;
 
 }
+
+.bench_img {
+    width: $logoWidth;
+    height: $logoHeight;
+    // background-size: 100% 100%;
+    // background-size: 300px 100px;
+    background: url('../../public/fashion-mnist-784-euclidean_10_euclidean.png') center/contain no-repeat;
+    display: block;
+    text-align: center;
+    margin: auto;
+
+    @media (max-width: $screenSmall) {
+        width: $logoWidth;
+        height: $logoHeight;
+      }
+  }

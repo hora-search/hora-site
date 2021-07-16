@@ -14,13 +14,14 @@ const Bench = (): JSX.Element => {
                 </div>
                 <div className={c.img_container}>
                     {/* <img className={c.img} src={pic.src} /> */}
-                    <Image
+                    {/* <Image
                         src={pic.src}
                         alt="benchmark"
                         // layout='responsive'
                         width={1190}
                         height={778}
-                    />
+                    /> */}
+                    <div className={c.bench_img}></div>
                 </div>
 
             </div>
