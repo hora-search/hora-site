@@ -47,10 +47,11 @@ $cardMarginBottom: 30px;
     filter: drop-shadow(5px 5px 0 $shadowColor);
 }
 
-.img {
-    width: 50%;
+.img_container {
+    width: 60%;
     margin: auto;
     display: block;
+    text-align: center;
 }
 
 .instrument {
