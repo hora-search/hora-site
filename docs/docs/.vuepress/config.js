@@ -32,6 +32,7 @@ module.exports = ctx => ({
     editLinks: true,
     docsDir: 'packages/docs/docs',
     smoothScroll: true,
+    logo: '/logo.svg',
     locales: {
       '/': {
         label: 'English',
