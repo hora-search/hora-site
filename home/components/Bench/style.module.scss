@@ -1,0 +1,60 @@
+@import 'styles/shared.scss';
+
+$cardMarginBottom: 30px;
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    >* {
+        flex: none;
+    }
+
+    padding: 40px 0;
+}
+
+.container_wrapper {
+    flex: none;
+    margin-bottom: $cardMarginBottom;
+    width: calc(80% - 20px);
+
+    @media (max-width: $screenLarge) {
+        width: calc(40% - 25px);
+    }
+
+    @media (max-width: $screenMedium) {
+        width: 100%;
+    }
+}
+
+.container {
+    display: block;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    color: #63341a;
+    font-weight: bold;
+}
+
+.title {
+    margin: 0 0 40px;
+    padding: 5px 10px;
+    color: #ffddb7;
+    font-size: 28px;
+    font-family: menlo, consolas, 'Courier New', Courier, monospace;
+    text-align: center;
+    background-color: #84471f;
+    filter: drop-shadow(5px 5px 0 $shadowColor);
+}
+
+.img {
+    width: 50%;
+    margin: auto;
+    display: block;
+}
+
+.instrument {
+    text-align: center;
+    font-weight: normal;
+
+}
