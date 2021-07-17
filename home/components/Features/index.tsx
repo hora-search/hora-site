@@ -12,31 +12,31 @@ const features: { title: string; desc: React.ReactNode; img?: string }[] = [
     desc: (
       <ul>
         <li>
-          <em>no_std</em> support (in the future, not full support)
+          Support <em>no_std</em> (WIP, not all features)
         </li>
         <li>
-          <em>Windows</em>, <em>Linux</em> and <em>OS X</em> Support
+          Support <em>Windows</em>, <em>Linux</em> and <em>OS X</em>
         </li>
         <li>
-          <em>IOS</em> and <em>Android</em> Support (WIP)
+          Support <em>IOS</em> and <em>Android</em>  (WIP)
         </li>
         <li>
-          <strong>without</strong> any heavy library, such as BLAS
+          <strong>No</strong> heavy dependency, such as BLAS
         </li>
       </ul>
     ),
   },
   {
-    title: 'Security 🔒 and Productive ⭐',
+    title: 'Reliable and Productive ⭐',
     desc: (
       <ul>
-        <li>rust compiler guarantee all code</li>
+        <li>Rust compiler secure all code</li>
         <li>
-          language lib like <em>Python lib</em>, the memory is managed by the Rust
+          Memory managed by Rust for all language libs such as <em>Python lib</em>
         </li>
-        <li>great testing coverage</li>
-        <li>well documented</li>
-        <li>elegant and simple API, which is extremely easy to learn</li>
+        <li>Broad testing coverage</li>
+        <li>Well documented</li>
+        <li>Elegant and simple API, easy to learn</li>
       </ul>
     ),
   },
@@ -50,10 +50,10 @@ const features: { title: string; desc: React.ReactNode; img?: string }[] = [
           </strong>
         </li>
         <li>
-          <strong>Stable Algorithm Implementation</strong>
+          <strong>Stable algorithm implementation</strong>
         </li>
         <li>
-          <strong>Multiple Threads Design</strong>
+          <strong>Multiple threads design</strong>
         </li>
       </ul>
     ),
