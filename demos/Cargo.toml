@@ -1,0 +1,36 @@
+[package]
+name = "demos"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.dev]
+codegen-units = 4 
+debug = 1 # required for line numbers in tests, see tikv #5049
+debug-assertions = true 
+incremental = true 
+lto = false 
+opt-level = 0 
+overflow-checks = false 
+panic = 'unwind' 
+rpath = false 
+
+[profile.release]
+codegen-units = 1
+debug = false
+debug-assertions = false
+incremental = false
+lto = "fat"
+opt-level = 3
+overflow-checks = false
+panic = 'unwind'
+rpath = false
+
+[dependencies]
+actix-web = "3"
+hora = { package = "hora", path = "../../hora", features=["simd"]}
+serde = { version = "1.0", features = ["derive"] }
+futures = "0.3.15"
+rand = "0.8.3"
+serde_json = "1.0"
+csv = "1.1"
