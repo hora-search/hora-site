@@ -1,17 +1,17 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Result};
-use csv;
-use futures::future::{ready, Ready};
-use hora;
+use actix_web::{get, web, App, HttpResponse, HttpServer, Result};
+
+
+
 use hora::core::ann_index::ANNIndex;
-use rand::distributions::{Alphanumeric, Standard, Uniform};
+
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
-use serde_json::Result as OtherResult;
+
 use std::collections::HashMap;
-use std::fs;
+
 use std::fs::File;
 use std::io::Read;
-use std::time::{SystemTime, UNIX_EPOCH};
+
 
 static wine: &str = "wine";
 static celebrity: &str = "celebrity";
@@ -137,7 +137,7 @@ fn prepare_data() -> web::Data<ServingData> {
     let mut wine_data: HashMap<String, WineReviewsSearchItem> = HashMap::new();
     for result in rdr.deserialize() {
         let record: WineReviewsItem = result.unwrap();
-        if record.embedding.len() == 0 {
+        if record.embedding.is_empty() {
             continue;
         }
         let temp: Vec<f32> = serde_json::from_str(&record.embedding).unwrap();
@@ -170,11 +170,11 @@ fn prepare_data() -> web::Data<ServingData> {
 
     println!("finish preparing");
     web::Data::new(ServingData {
-        indices: indices,
+        indices,
         wine_reviews_data: wine_data,
-        wine_reviews_key_list: wine_reviews_key_list.clone(),
-        celebrity_data: celebrity_data,
-        celebrity_key_list: celebrity_key_list.clone(),
+        wine_reviews_key_list,
+        celebrity_data,
+        celebrity_key_list,
         cats_data: HashMap::new(),
         cats_key_list: Vec::new(),
     })
