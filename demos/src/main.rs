@@ -13,7 +13,11 @@ use std::fs::File;
 use std::io::Read;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-#[derive(Serialize, Deserialize, Debug)]
+static wine: &str = "wine";
+static celebrity: &str = "celebrity";
+static demo_prefix: &str = "/demos/public/";
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct WineReviewsSearchItem {
     embedding: Vec<f32>,
     id: String,
@@ -75,9 +79,6 @@ struct ServingData {
 }
 
 fn prepare_data() -> web::Data<ServingData> {
-    const wine: &str = "wine";
-    const celebrity: &str = "celebrity";
-
     let mut indices: HashMap<String, Box<hora::index::hnsw_idx::HNSWIndex<f32, String>>> =
         HashMap::new();
     indices.insert(
@@ -119,7 +120,8 @@ fn prepare_data() -> web::Data<ServingData> {
         indices
             .get_mut(celebrity)
             .unwrap()
-            .add(&x.embedding, x.pic_name.clone());
+            .add(&x.embedding, x.pic_name.clone())
+            .unwrap();
     });
     println!("start build {:?} point", celebrity_key_list.len());
     indices
@@ -143,7 +145,8 @@ fn prepare_data() -> web::Data<ServingData> {
         indices
             .get_mut(wine)
             .unwrap()
-            .add(&temp.clone(), id.clone());
+            .add(&temp.clone(), id.clone())
+            .unwrap();
 
         wine_data.insert(
             record.id.clone(),
@@ -238,7 +241,7 @@ async fn celebrity_random(data: web::Data<ServingData>) -> Result<HttpResponse> 
                 .unwrap();
             PicSearchItem {
                 pic_name: celebrity_item.pic_name.clone(),
-                pic_url: celebrity_item.pic_url.clone(),
+                pic_url: demo_prefix.to_owned() + &celebrity_item.pic_name,
                 embedding: celebrity_item.embedding.clone(),
             }
         })
@@ -256,7 +259,7 @@ async fn celebrity_search(
         Some(item) => {
             let resp_list = data
                 .indices
-                .get("celebrity")
+                .get(celebrity)
                 .unwrap()
                 .search(&item.embedding, k)
                 .iter()
@@ -264,7 +267,7 @@ async fn celebrity_search(
                     let celebrity_item = data.celebrity_data.get(x).unwrap();
                     PicSearchItem {
                         pic_name: celebrity_item.pic_name.clone(),
-                        pic_url: celebrity_item.pic_url.clone(),
+                        pic_url: demo_prefix.to_owned() + &celebrity_item.pic_name,
                         embedding: celebrity_item.embedding.clone(),
                     }
                 })
@@ -276,18 +279,65 @@ async fn celebrity_search(
     }
 }
 
+#[get("/wine_search")]
+async fn wine_search(
+    query: web::Query<SearchQuery>,
+    data: web::Data<ServingData>,
+) -> Result<HttpResponse> {
+    static k: usize = 5;
+    match data.wine_reviews_data.get(&query.query.clone()) {
+        Some(item) => {
+            let resp_list = data
+                .indices
+                .get(wine)
+                .unwrap()
+                .search(&item.embedding, k)
+                .iter()
+                .map(|x| {
+                    let wine_item = data.wine_reviews_data.get(x).unwrap();
+                    wine_item.clone()
+                })
+                .collect::<Vec<WineReviewsSearchItem>>();
+
+            Ok(HttpResponse::Ok().json(WineReviewsSearchResp { resp: resp_list }))
+        }
+        None => Ok(HttpResponse::NotFound().finish()),
+    }
+}
+
+#[get("/wine_random")]
+async fn wine_random(data: web::Data<ServingData>) -> Result<HttpResponse> {
+    static k: usize = 5;
+    let mut rng = thread_rng();
+    let resp_list = (0..k)
+        .map(|_| {
+            let n: usize = rng.gen_range(0..data.wine_reviews_key_list.len());
+            let wine_item = data
+                .wine_reviews_data
+                .get(&data.wine_reviews_key_list[n])
+                .unwrap();
+            wine_item.clone()
+        })
+        .collect::<Vec<WineReviewsSearchItem>>();
+    Ok(HttpResponse::Ok().json(WineReviewsSearchResp { resp: resp_list }))
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
-        App::new()
-            .app_data(prepare_data())
-            .service(cat_search)
-            .service(celebrity_search)
-            .service(celebrity_random)
-            .service(cat_random)
+        App::new().service(
+            web::scope("/demos")
+                .app_data(prepare_data())
+                // .service(cat_search)
+                .service(celebrity_search)
+                .service(celebrity_random)
+                // .service(cat_random)
+                .service(wine_random)
+                .service(wine_search),
+        )
     })
     .workers(1)
-    .bind("127.0.0.1:8080")?
+    .bind("0.0.0.0:8080")?
     .run()
     .await
 }
