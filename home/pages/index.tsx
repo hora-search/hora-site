@@ -13,6 +13,7 @@ import Bench from '../components/Bench';
 import BigTitle from '../components/BigTitle';
 import Features from '../components/Features';
 import Installation from '../components/Installation';
+import Example from '../components/Examples';
 
 import c from '../styles/home.module.scss';
 
@@ -37,8 +38,9 @@ const Home = (): JSX.Element => {
         <BigTitle />
         <Features />
         <Installation />
+        <Bench />
+        <Example />
       </div>
-      <Bench />
       <Footer />
       <Script src="https://www.googletagmanager.com/gtag/js?id=G-ZCQDT118MM" />
       <Script>{`
