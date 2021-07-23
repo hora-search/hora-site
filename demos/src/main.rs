@@ -11,6 +11,12 @@ use std::collections::HashMap;
 
 use std::fs::File;
 use std::io::Read;
+use embedding::embeder_client::EmbederClient;
+use embedding::EmbedRequest;
+
+pub mod embedding {
+    tonic::include_proto!("embedding");
+}
 
 
 static wine: &str = "wine";
