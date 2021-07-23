@@ -111,39 +111,39 @@ fn prepare_data() -> web::Data<ServingData> {
     );
 
     // celebrity
-    // let mut file = File::open("celebrity_emebeddings.json").unwrap();
-    // let mut data = String::new();
-    // file.read_to_string(&mut data).unwrap();
+    let mut file = File::open("celebrity_emebeddings.json").unwrap();
+    let mut data = String::new();
+    file.read_to_string(&mut data).unwrap();
 
-    // let celebrity_info: Vec<PicSearchItem> =
-    //     serde_json::from_str(&data).expect("JSON was not well-formatted");
+    let celebrity_info: Vec<PicSearchItem> =
+        serde_json::from_str(&data).expect("JSON was not well-formatted");
     let mut celebrity_data = HashMap::new();
     let mut celebrity_key_list = Vec::new();
 
-    // celebrity_info.iter().for_each(|x| {
-    //     celebrity_data.insert(
-    //         x.pic_name.clone(),
-    //         PicItem {
-    //             pic_name: x.pic_name.clone(),
-    //             pic_url: "".to_string(),
-    //             embedding: x.embedding.clone(),
-    //         },
-    //     );
-    //     celebrity_key_list.push(x.pic_name.clone());
-    //     indices
-    //         .get_mut(celebrity)
-    //         .unwrap()
-    //         .add(&x.embedding, x.pic_name.clone())
-    //         .unwrap();
-    // });
-    // println!("start build {:?} point", celebrity_key_list.len());
-    // indices
-    //     .get_mut(celebrity)
-    //     .unwrap()
-    //     .build(hora::core::metrics::Metric::Euclidean);
+    celebrity_info.iter().for_each(|x| {
+        celebrity_data.insert(
+            x.pic_name.clone(),
+            PicItem {
+                pic_name: x.pic_name.clone(),
+                pic_url: "".to_string(),
+                embedding: x.embedding.clone(),
+            },
+        );
+        celebrity_key_list.push(x.pic_name.clone());
+        indices
+            .get_mut(celebrity)
+            .unwrap()
+            .add(&x.embedding, x.pic_name.clone())
+            .unwrap();
+    });
+    println!("start build {:?} point", celebrity_key_list.len());
+    indices
+        .get_mut(celebrity)
+        .unwrap()
+        .build(hora::core::metrics::Metric::Euclidean);
 
     // wine
-    let filename = "/home/ec2-user/data/demo.csv";
+    let filename = "demo.csv";
     let wine_file = File::open(filename).unwrap();
     let mut rdr = csv::Reader::from_reader(wine_file);
     let mut wine_reviews_key_list = Vec::new();
