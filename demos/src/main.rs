@@ -325,7 +325,7 @@ async fn main() -> std::io::Result<()> {
                 .service(celebrity_search)
                 .service(celebrity_random)
                 // .service(cat_random)
-                .service(wine_search)
+                .service(wine_search),
         )
     })
     .workers(1)
