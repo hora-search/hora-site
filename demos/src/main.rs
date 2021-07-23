@@ -9,14 +9,14 @@ use std::collections::HashMap;
 
 use embedding::embeder_client::EmbederClient;
 use embedding::EmbedRequest;
-use futures::executor;
+
 use std::fs::File;
 use std::io::Read;
-use tonic::transport::Channel;
+
 pub mod embedding {
     tonic::include_proto!("embedding");
 }
-use tokio::runtime::Runtime;
+
 
 static wine: &str = "wine";
 static celebrity: &str = "celebrity";
@@ -341,7 +341,7 @@ async fn async_embed(description: &str) -> Vec<f32> {
     });
     let response = embed_client.embed(request).await.unwrap();
 
-    return response.into_inner().embedding;
+    response.into_inner().embedding
 }
 
 fn embed(description: &str, rt: &tokio::runtime::Runtime) -> Vec<f32> {
