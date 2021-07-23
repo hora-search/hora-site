@@ -1,7 +1,5 @@
 use actix_web::{get, web, App, HttpResponse, HttpServer, Result};
 
-
-
 use hora::core::ann_index::ANNIndex;
 
 use rand::{thread_rng, Rng};
@@ -9,15 +7,16 @@ use serde::{Deserialize, Serialize};
 
 use std::collections::HashMap;
 
-use std::fs::File;
-use std::io::Read;
 use embedding::embeder_client::EmbederClient;
 use embedding::EmbedRequest;
-
+use futures::executor;
+use std::fs::File;
+use std::io::Read;
+use tonic::transport::Channel;
 pub mod embedding {
     tonic::include_proto!("embedding");
 }
-
+use tokio::runtime::Runtime;
 
 static wine: &str = "wine";
 static celebrity: &str = "celebrity";
@@ -56,6 +55,11 @@ struct SearchQuery {
     query: String,
 }
 
+#[derive(Deserialize)]
+struct SearchWine {
+    description: String,
+}
+
 #[derive(Clone, Debug)]
 struct PicItem {
     pic_name: String,
@@ -82,9 +86,12 @@ struct ServingData {
     celebrity_key_list: Vec<String>,
     cats_data: HashMap<String, PicItem>,
     cats_key_list: Vec<String>,
+
+    rt: tokio::runtime::Runtime,
 }
 
 fn prepare_data() -> web::Data<ServingData> {
+    println!("start preparing data");
     let mut indices: HashMap<String, Box<hora::index::hnsw_idx::HNSWIndex<f32, String>>> =
         HashMap::new();
     indices.insert(
@@ -104,39 +111,39 @@ fn prepare_data() -> web::Data<ServingData> {
     );
 
     // celebrity
-    let mut file = File::open("celebrity_emebeddings.json").unwrap();
-    let mut data = String::new();
-    file.read_to_string(&mut data).unwrap();
+    // let mut file = File::open("celebrity_emebeddings.json").unwrap();
+    // let mut data = String::new();
+    // file.read_to_string(&mut data).unwrap();
 
-    let celebrity_info: Vec<PicSearchItem> =
-        serde_json::from_str(&data).expect("JSON was not well-formatted");
+    // let celebrity_info: Vec<PicSearchItem> =
+    //     serde_json::from_str(&data).expect("JSON was not well-formatted");
     let mut celebrity_data = HashMap::new();
     let mut celebrity_key_list = Vec::new();
 
-    celebrity_info.iter().for_each(|x| {
-        celebrity_data.insert(
-            x.pic_name.clone(),
-            PicItem {
-                pic_name: x.pic_name.clone(),
-                pic_url: "".to_string(),
-                embedding: x.embedding.clone(),
-            },
-        );
-        celebrity_key_list.push(x.pic_name.clone());
-        indices
-            .get_mut(celebrity)
-            .unwrap()
-            .add(&x.embedding, x.pic_name.clone())
-            .unwrap();
-    });
-    println!("start build {:?} point", celebrity_key_list.len());
-    indices
-        .get_mut(celebrity)
-        .unwrap()
-        .build(hora::core::metrics::Metric::Euclidean);
+    // celebrity_info.iter().for_each(|x| {
+    //     celebrity_data.insert(
+    //         x.pic_name.clone(),
+    //         PicItem {
+    //             pic_name: x.pic_name.clone(),
+    //             pic_url: "".to_string(),
+    //             embedding: x.embedding.clone(),
+    //         },
+    //     );
+    //     celebrity_key_list.push(x.pic_name.clone());
+    //     indices
+    //         .get_mut(celebrity)
+    //         .unwrap()
+    //         .add(&x.embedding, x.pic_name.clone())
+    //         .unwrap();
+    // });
+    // println!("start build {:?} point", celebrity_key_list.len());
+    // indices
+    //     .get_mut(celebrity)
+    //     .unwrap()
+    //     .build(hora::core::metrics::Metric::Euclidean);
 
     // wine
-    let filename = "winemag-data_first150k_processed.csv";
+    let filename = "/home/ec2-user/data/demo.csv";
     let wine_file = File::open(filename).unwrap();
     let mut rdr = csv::Reader::from_reader(wine_file);
     let mut wine_reviews_key_list = Vec::new();
@@ -183,6 +190,7 @@ fn prepare_data() -> web::Data<ServingData> {
         celebrity_key_list,
         cats_data: HashMap::new(),
         cats_key_list: Vec::new(),
+        rt: tokio::runtime::Runtime::new().unwrap(),
     })
 }
 
@@ -287,44 +295,23 @@ async fn celebrity_search(
 
 #[get("/wine_search")]
 async fn wine_search(
-    query: web::Query<SearchQuery>,
+    query: web::Query<SearchWine>,
     data: web::Data<ServingData>,
 ) -> Result<HttpResponse> {
     static k: usize = 5;
-    match data.wine_reviews_data.get(&query.query.clone()) {
-        Some(item) => {
-            let resp_list = data
-                .indices
-                .get(wine)
-                .unwrap()
-                .search(&item.embedding, k)
-                .iter()
-                .map(|x| {
-                    let wine_item = data.wine_reviews_data.get(x).unwrap();
-                    wine_item.clone()
-                })
-                .collect::<Vec<WineReviewsSearchItem>>();
 
-            Ok(HttpResponse::Ok().json(WineReviewsSearchResp { resp: resp_list }))
-        }
-        None => Ok(HttpResponse::NotFound().finish()),
-    }
-}
-
-#[get("/wine_random")]
-async fn wine_random(data: web::Data<ServingData>) -> Result<HttpResponse> {
-    static k: usize = 5;
-    let mut rng = thread_rng();
-    let resp_list = (0..k)
-        .map(|_| {
-            let n: usize = rng.gen_range(0..data.wine_reviews_key_list.len());
-            let wine_item = data
-                .wine_reviews_data
-                .get(&data.wine_reviews_key_list[n])
-                .unwrap();
+    let resp_list = data
+        .indices
+        .get(wine)
+        .unwrap()
+        .search(&embed(&query.description, &data.rt), k)
+        .iter()
+        .map(|x| {
+            let wine_item = data.wine_reviews_data.get(x).unwrap();
             wine_item.clone()
         })
         .collect::<Vec<WineReviewsSearchItem>>();
+
     Ok(HttpResponse::Ok().json(WineReviewsSearchResp { resp: resp_list }))
 }
 
@@ -338,12 +325,25 @@ async fn main() -> std::io::Result<()> {
                 .service(celebrity_search)
                 .service(celebrity_random)
                 // .service(cat_random)
-                .service(wine_random)
-                .service(wine_search),
+                .service(wine_search)
         )
     })
     .workers(1)
     .bind("0.0.0.0:8080")?
     .run()
     .await
+}
+
+async fn async_embed(description: &str) -> Vec<f32> {
+    let mut embed_client = EmbederClient::connect("http://[::1]:50051").await.unwrap();
+    let request = tonic::Request::new(EmbedRequest {
+        value: description.to_string(),
+    });
+    let response = embed_client.embed(request).await.unwrap();
+
+    return response.into_inner().embedding;
+}
+
+fn embed(description: &str, rt: &tokio::runtime::Runtime) -> Vec<f32> {
+    rt.block_on(async_embed(description))
 }
