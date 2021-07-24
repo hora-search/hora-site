@@ -23,11 +23,16 @@ module.exports = (ctx) => ({
     ],
     [
       'script',
-      { defer: true },
-      `var header = document.querySelector('.home-link');
-    if (header) {
-      header.href = 'https://horasearch.com/';
-    }`,
+      {},
+      `(() => { 
+        var script = document.createElement("script"); 
+        script.innerHTML = \`var header = document.querySelector('.home-link');
+        if (header) {
+          header.href = 'https://horasearch.com/';
+        }\`;
+        setTimeout(() => document.body.append(script),0);
+        })();
+      `,
     ],
     ['link', { rel: 'icon', href: `/logo.png` }],
     ['link', { rel: 'manifest', href: '/manifest.json' }],
