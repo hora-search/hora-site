@@ -5,75 +5,63 @@ $logoWidth: 500px;
 $logoHeight: 408px;
 
 .wrapper {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 
-    >* {
-        flex: none;
-    }
+  > * {
+    flex: none;
+  }
 
-    padding: 40px 0;
+  padding: 40px 0;
 }
 
 .container_wrapper {
-    flex: none;
-    margin-bottom: $cardMarginBottom;
-    width: calc(80% - 20px);
+  flex: none;
+  margin-bottom: $cardMarginBottom;
+  width: calc(80% - 20px);
 
-    @media (max-width: $screenLarge) {
-        width: calc(40% - 25px);
-    }
+  @media (max-width: $screenLarge) {
+    width: calc(40% - 25px);
+  }
 
-    @media (max-width: $screenMedium) {
-        width: 100%;
-    }
+  @media (max-width: $screenMedium) {
+    width: 100%;
+  }
 }
 
 .container {
-    display: block;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    color: #63341a;
-    font-weight: bold;
+  display: block;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  color: #63341a;
+  font-weight: bold;
 }
 
 .title {
-    margin: 0 0 40px;
-    padding: 5px 10px;
-    color: #ffddb7;
-    font-size: 28px;
-    font-family: menlo, consolas, 'Courier New', Courier, monospace;
-    text-align: center;
-    background-color: #84471f;
-    filter: drop-shadow(5px 5px 0 $shadowColor);
+  margin: 0 0 40px;
+  padding: 5px 10px;
+  color: #ffddb7;
+  font-size: 28px;
+  font-family: menlo, consolas, 'Courier New', Courier, monospace;
+  text-align: center;
+  background-color: #84471f;
+  filter: drop-shadow(5px 5px 0 $shadowColor);
 }
 
 .img_container {
-    width: 60%;
-    margin: auto;
-    display: block;
-    text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $bgColor;
 }
 
 .instrument {
-    text-align: center;
-    font-weight: normal;
-
+  text-align: center;
+  font-weight: normal;
 }
 
 .bench_img {
-    width: $logoWidth;
-    height: $logoHeight;
-    // background-size: 100% 100%;
-    // background-size: 300px 100px;
-    background: url('../../public/fashion-mnist-784-euclidean_10_euclidean.png') center/contain no-repeat;
-    display: block;
-    text-align: center;
-    margin: auto;
-
-    @media (max-width: $screenSmall) {
-        width: $logoWidth;
-        height: $logoHeight;
-      }
-  }
+  width: 100%;
+  mix-blend-mode: multiply;
+}
