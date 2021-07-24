@@ -1,11 +1,13 @@
 import React from 'react';
+import Image from 'next/image';
+
+import SectionTitle from '../SectionTitle';
 import c from './style.module.scss';
 import pic from '../../public/fashion-mnist-784-euclidean_10_euclidean.png';
-import Image from 'next/image';
 
 const Bench = (): JSX.Element => (
   <div className={c.wrapper}>
-    <h2 className={c.title}>Benchmark</h2>
+    <SectionTitle>Benchmark</SectionTitle>
     <div className={c.container_wrapper}>
       <div className={c.container}>
         <p className={c.instrument}>

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import hljs from 'highlight.js';
 import classnames from 'classnames';
 
+import SectionTitle from '../SectionTitle';
 import c from './style.module.scss';
 
 const languageExamples: { language: string; lines: string[] }[] = [
@@ -77,7 +78,7 @@ const Example = (): JSX.Element => {
 
   return (
     <div className={c.wrapper}>
-      <h2 className={c.title}>Examples</h2>
+      <SectionTitle>Examples</SectionTitle>
       <div className={c.content}>
         <div className={c.languageSwitcher}>
           {languageExamples.map(({ language }) => {

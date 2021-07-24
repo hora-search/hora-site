@@ -7,6 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import hljs from 'highlight.js';
 import classnames from 'classnames';
 
+import SectionTitle from '../SectionTitle';
 import c from './style.module.scss';
 
 const languageGuides: { language: string; lines: string[] }[] = [
@@ -38,7 +39,7 @@ const Installation = (): JSX.Element => {
 
   return (
     <div className={c.wrapper}>
-      <h2 className={c.title}>Installation</h2>
+      <SectionTitle>Installation</SectionTitle>
       <div className={c.content}>
         <div className={c.languageSwitcher}>
           {languageGuides.map(({ language }) => {

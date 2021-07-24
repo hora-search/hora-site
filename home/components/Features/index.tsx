@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import SectionTitle from '../SectionTitle';
 import c from './style.module.scss';
 
 const features: { title: string; desc: React.ReactNode; img?: string }[] = [
@@ -101,7 +102,7 @@ const features: { title: string; desc: React.ReactNode; img?: string }[] = [
 const Features = (): JSX.Element => {
   return (
     <div className={c.wrapper}>
-      <h2 className={c.title}>Features</h2>
+      <SectionTitle>Features</SectionTitle>
       <div className={c.featureList}>
         {features.map(({ title, desc, img }) => (
           <div key={title} className={c.card}>
