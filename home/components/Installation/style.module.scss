@@ -83,8 +83,11 @@ $cardMarginBottom: 30px;
 
   &::before {
     content: counter(lineCounter);
+    display: inline-block;
+    width: 30px;
     margin-right: 10px;
     color: #63341a66;
+    text-align: right;
     user-select: none;
   }
 }

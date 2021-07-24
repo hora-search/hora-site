@@ -15,6 +15,14 @@ code {
     monospace;
 }
 
+pre code.hljs.hljs {
+  padding: 0;
+  overflow-x: visible;
+}
+code.hljs.hljs {
+  background: none;
+}
+
 * {
   box-sizing: border-box;
 }

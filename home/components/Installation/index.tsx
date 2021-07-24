@@ -3,7 +3,10 @@
  * @Description: Component
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import hljs from 'highlight.js';
+import classnames from 'classnames';
+
 import c from './style.module.scss';
 
 const languageGuides: { language: string; lines: string[] }[] = [
@@ -24,8 +27,14 @@ const languageGuides: { language: string; lines: string[] }[] = [
 const Installation = (): JSX.Element => {
   const [activeLanguage, setActiveLanguage] = useState(languageGuides[0]!.language);
 
-  const curCodeLines =
-    languageGuides.find((guide) => guide.language === activeLanguage)?.lines || [];
+  const curGuide = useMemo(
+    () => languageGuides.find((guide) => guide.language === activeLanguage),
+    [activeLanguage]
+  );
+
+  useEffect(() => {
+    hljs.highlightAll();
+  }, [curGuide]);
 
   return (
     <div className={c.wrapper}>
@@ -51,15 +60,18 @@ const Installation = (): JSX.Element => {
         </div>
         <div className={c.codeShowcase}>
           <pre className={c.codeBlock}>
-            {curCodeLines.map((line, index) => (
-              <code key={index} className={c.codeLine}>
+            {curGuide.lines.map((line, index) => (
+              <code
+                key={index}
+                className={classnames(c.codeLine, `highlight-${curGuide.language}`)}
+              >
                 {line}
               </code>
             ))}
           </pre>
           <button
             className={c.copyBtn}
-            onClick={() => navigator.clipboard.writeText(curCodeLines.join('\n'))}
+            onClick={() => navigator.clipboard.writeText(curGuide.lines.join('\n'))}
           >
             Copy
           </button>

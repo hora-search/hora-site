@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import hljs from 'highlight.js';
+import classnames from 'classnames';
+
 import c from './style.module.scss';
 
 const languageExamples: { language: string; lines: string[] }[] = [
-    {
-        language: 'Python',
-        lines: `import numpy as np
+  {
+    language: 'Python',
+    lines: `import numpy as np
 from hora import HNSWIndex
         
 dimension = 50
@@ -16,11 +19,11 @@ for i in range(0, len(samples)):
 index.build("euclidean")
 target = np.random.randint(0, n)
 print("{} has neighbors: {}".format(target, index.search(samples[target], 10))) # 631 has neighbors: [631, 656, 113, 457, 584, 179, 586, 979, 619, 976]
-    `.split("\n"),
-    },
-    {
-        language: 'Rust',
-        lines: `use hora::core::ann_index::ANNIndex;
+    `.split('\n'),
+  },
+  {
+    language: 'Rust',
+    lines: `use hora::core::ann_index::ANNIndex;
 use rand::{thread_rng, Rng};
 use rand_distr::{Distribution, Normal};
 
@@ -56,56 +59,62 @@ pub fn demo() {
         index.search(&samples[target], 10) // search for k nearest neighbors
     ); // 523 has neighbors: [523, 762, 364, 268, 561, 231, 380, 817, 331, 246]
 }
-    `.split("\n"),
-    },
+    `.split('\n'),
+  },
 ];
 
 const Example = (): JSX.Element => {
-    const [activeLanguage, setActiveLanguage] = useState(languageExamples[0]!.language);
+  const [activeLanguage, setActiveLanguage] = useState(languageExamples[0]!.language);
 
-    const curCodeLines =
-        languageExamples.find((guide) => guide.language === activeLanguage)?.lines || [];
+  const curExample = useMemo(
+    () => languageExamples.find((example) => example.language === activeLanguage),
+    [activeLanguage]
+  );
 
-    return (
-        <div className={c.wrapper}>
-            <h2 className={c.title}>Examples</h2>
-            <div className={c.content}>
-                <div className={c.languageSwitcher}>
-                    {languageExamples.map(({ language }) => {
-                        const isActive = activeLanguage === language;
-                        return (
-                            <label
-                                key={language}
-                                className={`${c.switcherItem} ${isActive ? c.activeLanguage : ''}`}
-                            >
-                                <input
-                                    checked={isActive}
-                                    onChange={() => setActiveLanguage(language)}
-                                    type="radio"
-                                />
-                                {language}
-                            </label>
-                        );
-                    })}
-                </div>
-                <div className={c.codeShowcase}>
-                    <pre className={c.codeBlock}>
-                        {curCodeLines.map((line, index) => (
-                            <code key={index} className={c.codeLine}>
-                                {line}
-                            </code>
-                        ))}
-                    </pre>
-                    <button
-                        className={c.copyBtn}
-                        onClick={() => navigator.clipboard.writeText(curCodeLines.join('\n'))}
-                    >
-                        Copy
-          </button>
-                </div>
-            </div>
+  useEffect(() => {
+    hljs.highlightAll();
+  }, [curExample]);
+
+  return (
+    <div className={c.wrapper}>
+      <h2 className={c.title}>Examples</h2>
+      <div className={c.content}>
+        <div className={c.languageSwitcher}>
+          {languageExamples.map(({ language }) => {
+            const isActive = activeLanguage === language;
+            return (
+              <label
+                key={language}
+                className={`${c.switcherItem} ${isActive ? c.activeLanguage : ''}`}
+              >
+                <input
+                  checked={isActive}
+                  onChange={() => setActiveLanguage(language)}
+                  type="radio"
+                />
+                {language}
+              </label>
+            );
+          })}
         </div>
-    );
+        <div className={c.codeShowcase}>
+          <pre className={c.codeBlock}>
+            {curExample.lines.map((line, index) => (
+              <code key={index} className={classnames(c.codeLine, `language-${curExample.language}`)}>
+                {line}
+              </code>
+            ))}
+          </pre>
+          <button
+            className={c.copyBtn}
+            onClick={() => navigator.clipboard.writeText(curExample.lines.join('\n'))}
+          >
+            Copy
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default React.memo(Example);
