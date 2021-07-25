@@ -11,12 +11,12 @@ import c from './style.module.scss';
 
 const languageGuides: { language: string; lines: string[] }[] = [
   {
-    language: 'Rust',
-    lines: ['[dependencies]', 'hora = "0.1.0"'],
-  },
-  {
     language: 'Python',
     lines: ['$ pip install horapy'],
+  },
+  {
+    language: 'Rust',
+    lines: ['[dependencies]', 'hora = "0.1.0"'],
   },
   {
     language: 'Build From Source',
