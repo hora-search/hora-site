@@ -15,8 +15,7 @@ const demoConfigs: DemoConfig[] = [
   { key: 'celebrity', title: 'Celebrity Match', Comp: CelebMatch },
 ];
 
-interface Props {}
-const Demo = (props: Props): JSX.Element => {
+const Demo = (): JSX.Element => {
   const [activeDemo, setActiveDemo] = useState<DemoConfig['key']>(demoConfigs[0].key);
 
   const curDemo = useMemo(
