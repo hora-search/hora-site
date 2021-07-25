@@ -5,9 +5,10 @@ import classnames from 'classnames';
 import SectionTitle from '../SectionTitle';
 import c from './style.module.scss';
 
-const languageExamples: { language: string; lines: string[] }[] = [
+const languageExamples: { title: string; lang: string; lines: string[] }[] = [
   {
-    language: 'Python',
+    title: 'Python',
+    lang: 'python',
     lines: `import numpy as np
 from horapy import HNSWIndex
     
@@ -31,7 +32,8 @@ print("{} in {} \nhas neighbors: {}".format(
     target, index, index.search(samples[target], 10)))  # search`.split('\n'),
   },
   {
-    language: 'Rust',
+    title: 'Rust',
+    lang: 'rust',
     lines: `use hora::core::ann_index::ANNIndex;
 use rand::{thread_rng, Rng};
 use rand_distr::{Distribution, Normal};
@@ -70,10 +72,11 @@ pub fn demo() {
         target,
         index.search(&samples[target], 10) // search for k nearest neighbors
     );
-}`.split('\n')
+}`.split('\n'),
   },
   {
-    language: 'Javascript(WIP)',
+    title: 'Javascript(WIP)',
+    lang: 'javascript',
     lines: `const demo = () => {
   const dimension = 50;
     
@@ -91,10 +94,11 @@ pub fn demo() {
     feature.push(Math.random());
   }
   console.log("bf result",  .search(feature, 10)); //bf result Uint32Array(10) [704, 113, 358, 835, 408, 379, 117, 414, 808, 826]
-}`.split('\n')
+}`.split('\n'),
   },
   {
-    language: 'Java(WIP)',
+    title: 'Java(WIP)',
+    lang: 'java',
     lines: `public void demo() {
     final int dimension = 2;
     final float variance = 2.0f;
@@ -125,16 +129,16 @@ pub fn demo() {
 private static float getGaussian(Random fRandom, float aMean, float variance) {
     float r = (float) fRandom.nextGaussian();
     return aMean + r * variance;
-}`.split('\n')
+}`.split('\n'),
   },
 ];
 
 const Example = (): JSX.Element => {
-  const [activeLanguage, setActiveLanguage] = useState(languageExamples[0]!.language);
+  const [activeLang, setActiveLang] = useState(languageExamples[0]!.lang);
 
   const curExample = useMemo(
-    () => languageExamples.find((example) => example.language === activeLanguage),
-    [activeLanguage]
+    () => languageExamples.find((example) => example.lang === activeLang),
+    [activeLang]
   );
 
   useEffect(() => {
@@ -146,19 +150,15 @@ const Example = (): JSX.Element => {
       <SectionTitle>Examples</SectionTitle>
       <div className={c.content}>
         <div className={c.languageSwitcher}>
-          {languageExamples.map(({ language }) => {
-            const isActive = activeLanguage === language;
+          {languageExamples.map(({ title, lang }) => {
+            const isActive = activeLang === lang;
             return (
               <label
-                key={language}
-                className={`${c.switcherItem} ${isActive ? c.activeLanguage : ''}`}
+                key={lang}
+                className={classnames(c.switcherItem, { [c.activeLanguage]: isActive })}
               >
-                <input
-                  checked={isActive}
-                  onChange={() => setActiveLanguage(language)}
-                  type="radio"
-                />
-                {language}
+                <input checked={isActive} onChange={() => setActiveLang(lang)} type="radio" />
+                {title}
               </label>
             );
           })}
@@ -166,7 +166,7 @@ const Example = (): JSX.Element => {
         <div className={c.codeShowcase}>
           <pre className={c.codeBlock}>
             {curExample.lines.map((line, index) => (
-              <code key={index} className={classnames(c.codeLine, `language-${curExample.language}`)}>
+              <code key={index} className={classnames(c.codeLine, `language-${curExample.lang}`)}>
                 {line}
               </code>
             ))}

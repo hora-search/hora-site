@@ -10,27 +10,30 @@ import classnames from 'classnames';
 import SectionTitle from '../SectionTitle';
 import c from './style.module.scss';
 
-const languageGuides: { language: string; lines: string[] }[] = [
+const languageGuides: { title: string; lang: string; lines: string[] }[] = [
   {
-    language: 'Python',
+    title: 'Python',
+    lang: 'python',
     lines: ['$ pip install horapy'],
   },
   {
-    language: 'Rust',
+    title: 'Rust',
+    lang: 'rust',
     lines: ['[dependencies]', 'hora = "0.1.0"'],
   },
   {
-    language: 'Build From Source',
+    title: 'Build From Source',
+    lang: 'bash',
     lines: ['$ git clone https://github.com/hora-search/hora', '$ cargo build'],
   },
 ];
 
 const Installation = (): JSX.Element => {
-  const [activeLanguage, setActiveLanguage] = useState(languageGuides[0]!.language);
+  const [activeLang, setActiveLang] = useState(languageGuides[0]!.lang);
 
   const curGuide = useMemo(
-    () => languageGuides.find((guide) => guide.language === activeLanguage),
-    [activeLanguage]
+    () => languageGuides.find((guide) => guide.lang === activeLang),
+    [activeLang]
   );
 
   useEffect(() => {
@@ -42,19 +45,15 @@ const Installation = (): JSX.Element => {
       <SectionTitle>Installation</SectionTitle>
       <div className={c.content}>
         <div className={c.languageSwitcher}>
-          {languageGuides.map(({ language }) => {
-            const isActive = activeLanguage === language;
+          {languageGuides.map(({ title, lang }) => {
+            const isActive = activeLang === lang;
             return (
               <label
-                key={language}
-                className={`${c.switcherItem} ${isActive ? c.activeLanguage : ''}`}
+                key={lang}
+                className={classnames(c.switcherItem, { [c.activeLanguage]: isActive })}
               >
-                <input
-                  checked={isActive}
-                  onChange={() => setActiveLanguage(language)}
-                  type="radio"
-                />
-                {language}
+                <input checked={isActive} onChange={() => setActiveLang(lang)} type="radio" />
+                {title}
               </label>
             );
           })}
@@ -62,10 +61,7 @@ const Installation = (): JSX.Element => {
         <div className={c.codeShowcase}>
           <pre className={c.codeBlock}>
             {curGuide.lines.map((line, index) => (
-              <code
-                key={index}
-                className={classnames(c.codeLine, `highlight-${curGuide.language}`)}
-              >
+              <code key={index} className={classnames(c.codeLine, `highlight-${curGuide.lang}`)}>
                 {line}
               </code>
             ))}
