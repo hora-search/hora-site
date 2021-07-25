@@ -1,0 +1,59 @@
+@import 'styles/shared.scss';
+
+$cardMarginBottom: 30px;
+$logoWidth: 500px;
+$logoHeight: 408px;
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  > * {
+    flex: none;
+  }
+
+  padding: 40px 0;
+}
+
+.content {
+  display: flex;
+  align-self: stretch;
+  min-height: 300px;
+  border: 1px solid #63341a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.nav {
+  flex: none;
+  width: 190px;
+  color: #63341a;
+  border-right: 1px solid #63341a;
+  font-family: menlo, consolas, "Courier New", Courier, monospace;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    padding: 10px 20px;
+    cursor: pointer;
+
+    &:not(.activeItem):hover {
+      background-color: #63341a33;
+    }
+  }
+}
+
+.activeItem {
+  color: $bgColor;
+  background-color: #63341a;
+}
+
+.showcase {
+  flex: 1;
+  padding: 20px;
+  width: 100px;
+}

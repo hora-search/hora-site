@@ -1,0 +1,56 @@
+@import 'styles/shared.scss';
+
+.input {
+  display: block;
+  padding: 2px;
+  margin-bottom: 30px;
+  width: 100%;
+  color: #63341a;
+  font-size: 16px;
+  line-height: 1.3;
+  font-family: 'Times New Roman', Times, serif;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #63341a99;
+  outline: none;
+}
+
+.showcase {
+  width: 100%;
+  font-family: 'Times New Roman', Times, serif;
+  color: #63341a;
+  overflow: auto;
+}
+
+.dataPlaceholder {
+  text-align: center;
+  color: #a4816d;
+}
+
+.noData {
+  margin: 0;
+  text-align: center;
+}
+
+.wineItem {
+  margin-bottom: 20px;
+  min-width: 300px;
+}
+
+.wineDesc {
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+
+.wineFooter {
+  color: #a4816d;
+
+  > * + *::before {
+    content: ' · ';
+  }
+}
+
+.wineDesign {
+  color: #63341a;
+  font-weight: 700;
+}
