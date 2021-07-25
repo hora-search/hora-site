@@ -1,16 +1,23 @@
-# Install
+# Installation
 
-## Rust
+**`Rust`**
 
-in your `Cargo.toml`
+in `Cargo.toml`
 
 ```toml
 [dependencies]
-hora = "0.4.0"
+hora = "0.1.0"
 ```
 
-## Python
+**`Python`**
+
+```Bash
+$ pip install horapy
+```
+
+**`Building from source`**
 
 ```bash
-pip install hora
+$ git clone https://github.com/hora-search/hora
+$ cargo build
 ```

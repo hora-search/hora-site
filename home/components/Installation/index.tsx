@@ -16,7 +16,7 @@ const languageGuides: { language: string; lines: string[] }[] = [
   },
   {
     language: 'Python',
-    lines: ['$ pip install hora'],
+    lines: ['$ pip install horapy'],
   },
   {
     language: 'Build From Source',
