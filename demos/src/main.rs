@@ -86,9 +86,11 @@ struct WineReviewsItem {
     designation: String,
     province: String,
     embedding: String,
+    #[serde(default)]
     price: f32,
     region_1: String,
     region_2: String,
+    #[serde(default)]
     points: usize,
     variety: String,
     winery: String,
