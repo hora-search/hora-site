@@ -27,10 +27,10 @@ $navItemsCount: 2;
 
 .nav {
   flex: none;
-  width: 190px;
+  width: 160px;
   color: #63341a;
   border-right: 1px solid $borderColor;
-  font-family: menlo, consolas, 'Courier New', Courier, monospace;
+  font-family: $displayMono;
 
   ul {
     margin: 0;
@@ -39,6 +39,7 @@ $navItemsCount: 2;
   }
   li {
     padding: 10px 20px;
+    font-size: 18px;
     cursor: pointer;
 
     &:not(.activeItem):hover {
@@ -72,11 +73,11 @@ $navItemsCount: 2;
       display: flex;
 
       li {
-        padding: 10px 5px;
-        width: calc(100% / #{$navItemsCount});
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 10px 5px;
+        width: calc(100% / #{$navItemsCount});
         text-align: center;
 
         + li {

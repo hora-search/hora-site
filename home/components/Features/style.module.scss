@@ -19,7 +19,7 @@ $cardMarginBottom: 30px;
   padding: 5px 10px;
   color: #ffddb7;
   font-size: 28px;
-  font-family: menlo, consolas, 'Courier New', Courier, monospace;
+  font-family: $displayMono;
   text-align: center;
   background-color: #84471f;
   filter: drop-shadow(5px 5px 0 $shadowColor);
@@ -31,12 +31,12 @@ $cardMarginBottom: 30px;
   justify-content: space-between;
   margin-bottom: -$cardMarginBottom;
   color: #63341a;
-  font-weight: bold;
 }
 
 .card {
   flex: none;
   margin-bottom: $cardMarginBottom;
+  font-family: $displayMono;
   // padding: 20px;
   // background-color: #ffffff18;
   // box-shadow: 3px 3px 0 0 #301c1144, -2px -2px 0 0 #ffffff22;
@@ -75,5 +75,6 @@ $cardMarginBottom: 30px;
 
 .cardDesc {
   margin: 0;
+  font-size: 18px;
   line-height: 1.5;
 }

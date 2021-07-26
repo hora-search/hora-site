@@ -43,7 +43,7 @@ $logoHeight: 408px;
   padding: 5px 10px;
   color: #ffddb7;
   font-size: 28px;
-  font-family: menlo, consolas, 'Courier New', Courier, monospace;
+  font-family: $displayMono;
   text-align: center;
   background-color: #84471f;
   filter: drop-shadow(5px 5px 0 $shadowColor);
