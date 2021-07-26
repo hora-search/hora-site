@@ -10,6 +10,12 @@ interface WineData {
   designation: string;
   province: string;
   description: string;
+  price: number;
+  region_1: string;
+  region_2: string;
+  points: number;
+  variety: string;
+  winery: string;
 }
 
 const WineSearch = (): JSX.Element => {
@@ -63,6 +69,11 @@ const WineSearch = (): JSX.Element => {
           <span className={c.wineDesign}>{data.designation}</span>
           <span>{data.country}</span>
           <span>{data.province}</span>
+          <span>${data.price}</span>
+          <span>{data.region_1}</span>
+          <span>🌟{data.points}</span>
+          <span>{data.variety}</span>
+          <span>{data.winery}</span>
         </div>
       </div>
     ));
@@ -74,7 +85,7 @@ const WineSearch = (): JSX.Element => {
         className={c.input}
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
-        placeholder="Type some words to search wine."
+        placeholder="Type some words to describe your dream wine."
       />
       <div className={c.showcase}>{result}</div>
     </div>

@@ -11,8 +11,8 @@ interface DemoConfig {
   Comp: React.ComponentType<{}>;
 }
 const demoConfigs: DemoConfig[] = [
-  { key: 'wine', title: 'Wine Search', Comp: WineSearch },
   { key: 'celebrity', title: 'Celebrity Match', Comp: CelebMatch },
+  { key: 'wine', title: 'Wine Search', Comp: WineSearch },
 ];
 
 const Demo = (): JSX.Element => {
@@ -25,7 +25,7 @@ const Demo = (): JSX.Element => {
 
   return (
     <div className={c.wrapper}>
-      <SectionTitle>Demo</SectionTitle>
+      <SectionTitle>Demos</SectionTitle>
       <div className={c.content}>
         <nav className={c.nav}>
           <ul>

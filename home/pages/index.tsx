@@ -35,9 +35,9 @@ const Home = (): JSX.Element => {
         <BigTitle />
         <Features />
         <Installation />
+        <Demo />
         <Bench />
         <Example />
-        <Demo />
       </div>
       <Footer />
       <Script src="https://www.googletagmanager.com/gtag/js?id=G-ZCQDT118MM" />

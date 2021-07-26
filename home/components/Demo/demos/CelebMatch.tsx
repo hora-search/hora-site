@@ -19,7 +19,7 @@ const CelebMatch = (): JSX.Element => {
       // const resp = { json: () => Promise.resolve(mockCelebRandom) };
       const json = await resp.json();
       setChoices(json.resp);
-    } catch {}
+    } catch { }
   };
 
   useEffect(() => {
@@ -94,6 +94,9 @@ const CelebMatch = (): JSX.Element => {
           </div>
         </div>
       )}
+      <div className={c.demo_anouncement}>
+        <em>all image data comes from [<a href="http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html">CelebA dataset</a>], we use it only for algorithm demo, not any commercial activity. </em>
+      </div>
     </div>
   );
 };
