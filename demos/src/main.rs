@@ -86,8 +86,7 @@ struct WineReviewsItem {
     designation: String,
     province: String,
     embedding: String,
-    #[serde(default)]
-    price: f32,
+    price: Option<f32>,
     region_1: String,
     region_2: String,
     #[serde(default)]
@@ -181,6 +180,10 @@ fn prepare_data() -> web::Data<ServingData> {
             .add(&temp.clone(), id.clone())
             .unwrap();
 
+        let price = match record.price {
+            Some(p) => p,
+            None => 0.0,
+        };
         wine_data.insert(
             record.id.clone(),
             WineReviewsSearchItem {
@@ -190,7 +193,7 @@ fn prepare_data() -> web::Data<ServingData> {
                 description: record.description,
                 designation: record.designation,
                 province: record.province,
-                price: record.price,
+                price: price,
                 region_1: record.region_1,
                 region_2: record.region_2,
                 points: record.points,
