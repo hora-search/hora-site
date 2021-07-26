@@ -32,6 +32,7 @@ $cardMarginBottom: 30px;
 .languageSwitcher {
   display: flex;
   margin-bottom: 20px;
+  overflow: auto;
 }
 
 .switcherItem {

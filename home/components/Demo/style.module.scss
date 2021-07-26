@@ -1,8 +1,8 @@
 @import 'styles/shared.scss';
 
-$cardMarginBottom: 30px;
-$logoWidth: 500px;
-$logoHeight: 408px;
+$borderColor: #63341a;
+
+$navItemsCount: 2;
 
 .wrapper {
   display: flex;
@@ -20,7 +20,7 @@ $logoHeight: 408px;
   display: flex;
   align-self: stretch;
   min-height: 300px;
-  border: 1px solid #63341a;
+  border: 1px solid $borderColor;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -29,8 +29,8 @@ $logoHeight: 408px;
   flex: none;
   width: 190px;
   color: #63341a;
-  border-right: 1px solid #63341a;
-  font-family: menlo, consolas, "Courier New", Courier, monospace;
+  border-right: 1px solid $borderColor;
+  font-family: menlo, consolas, 'Courier New', Courier, monospace;
 
   ul {
     margin: 0;
@@ -56,4 +56,37 @@ $logoHeight: 408px;
   flex: 1;
   padding: 20px;
   width: 100px;
+}
+
+@media (max-width: $screenMedium) {
+  .content {
+    display: block;
+  }
+
+  .nav {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid $borderColor;
+
+    ul {
+      display: flex;
+
+      li {
+        padding: 10px 5px;
+        width: calc(100% / #{$navItemsCount});
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        + li {
+          border-left: 1px solid $borderColor;
+        }
+      }
+    }
+  }
+
+  .showcase {
+    width: 100%;
+  }
 }
