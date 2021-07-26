@@ -15,7 +15,7 @@ const CelebMatch = (): JSX.Element => {
 
   const fetchChoices = async () => {
     try {
-      const resp = await fetch(`celebrity_random`);
+      const resp = await fetch(`/demos/celebrity_random`);
       // const resp = { json: () => Promise.resolve(mockCelebRandom) };
       const json = await resp.json();
       setChoices(json.resp);
@@ -47,7 +47,7 @@ const CelebMatch = (): JSX.Element => {
       const testIsCurReq = () => refCurReqId.current === thisReqId;
 
       try {
-        const resp = await fetch(`celebrity_search?query=${activeChoice}`);
+        const resp = await fetch(`/demos/celebrity_search?query=${activeChoice}`);
         // const resp = { json: () => Promise.resolve(mockCelebSearch) };
         if (!testIsCurReq()) {
           return;
