@@ -35,6 +35,12 @@ struct WineReviewsSearchItem {
     description: String,
     designation: String,
     province: String,
+    price: f32,
+    region_1: String,
+    region_2: String,
+    points: usize,
+    variety: String,
+    winery: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -80,6 +86,12 @@ struct WineReviewsItem {
     designation: String,
     province: String,
     embedding: String,
+    price: f32,
+    region_1: String,
+    region_2: String,
+    points: usize,
+    variety: String,
+    winery: String,
 }
 
 struct ServingData {
@@ -176,6 +188,12 @@ fn prepare_data() -> web::Data<ServingData> {
                 description: record.description,
                 designation: record.designation,
                 province: record.province,
+                price: record.price,
+                region_1: record.region_1,
+                region_2: record.region_2,
+                points: record.points,
+                variety: record.variety,
+                winery: record.winery,
             },
         );
         wine_reviews_key_list.push(id);
@@ -324,10 +342,10 @@ async fn wine_search(query: web::Query<SearchWine>) -> Result<HttpResponse> {
         description_set.insert(x.description.clone());
         final_resp_list.push(x.clone());
     });
-    if final_resp_list.len() > K {
-        final_resp_list = final_resp_list[..K].to_vec();
+    if final_resp_list.len() > FINAL_K {
+        final_resp_list = final_resp_list[..FINAL_K].to_vec();
     } else {
-        final_resp_list = resp_list[..K].to_vec();
+        final_resp_list = resp_list[..FINAL_K].to_vec();
     }
 
     Ok(HttpResponse::Ok().json(WineReviewsSearchResp {
