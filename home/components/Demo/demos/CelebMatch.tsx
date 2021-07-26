@@ -94,6 +94,7 @@ const CelebMatch = (): JSX.Element => {
           </div>
         </div>
       )}
+      <div className={c.demo_anouncement}>all image data comes from <a href="http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html">CelebA dataset</a>, we use it only for algorithm demo, not for any commercial activity </div>
     </div>
   );
 };
