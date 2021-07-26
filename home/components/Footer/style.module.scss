@@ -1,0 +1,23 @@
+@import 'styles/shared.scss';
+
+.wrapper {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.divide_wrapper {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+}
+
+.divide {
+    border-top: 1px solid #84471f;
+    width: 100%;
+}
+
+.copyright {
+    text-align: center;
+    color: #63341a;
+}

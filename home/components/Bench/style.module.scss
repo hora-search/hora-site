@@ -1,0 +1,71 @@
+@import 'styles/shared.scss';
+
+$cardMarginBottom: 30px;
+$logoWidth: 500px;
+$logoHeight: 408px;
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  > * {
+    flex: none;
+  }
+
+  padding: 40px 0;
+}
+
+.container_wrapper {
+  flex: none;
+  margin-bottom: $cardMarginBottom;
+  width: calc(80% - 20px);
+
+  @media (max-width: $screenLarge) {
+    width: calc(40% - 25px);
+  }
+
+  @media (max-width: $screenMedium) {
+    width: 100%;
+  }
+}
+
+.container {
+  display: block;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  color: #63341a;
+  font-weight: bold;
+}
+
+.title {
+  margin: 0 0 40px;
+  padding: 5px 10px;
+  color: #ffddb7;
+  font-size: 28px;
+  font-family: $displayMono;
+  text-align: center;
+  background-color: #84471f;
+  filter: drop-shadow(5px 5px 0 $shadowColor);
+}
+
+.img_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $bgColor;
+}
+
+.instrument {
+  text-align: center;
+  font-weight: normal;
+}
+
+.bench_img {
+  width: 100%;
+  mix-blend-mode: multiply;
+}
+
+.link {
+  text-decoration: none;
+}

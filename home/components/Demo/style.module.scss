@@ -1,0 +1,93 @@
+@import 'styles/shared.scss';
+
+$borderColor: #63341a;
+
+$navItemsCount: 2;
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  > * {
+    flex: none;
+  }
+
+  padding: 40px 0;
+}
+
+.content {
+  display: flex;
+  align-self: stretch;
+  min-height: 300px;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.nav {
+  flex: none;
+  width: 160px;
+  color: #63341a;
+  border-right: 1px solid $borderColor;
+  font-family: $displayMono;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+
+    &:not(.activeItem):hover {
+      background-color: #63341a33;
+    }
+  }
+}
+
+.activeItem {
+  color: $bgColor;
+  background-color: #63341a;
+}
+
+.showcase {
+  flex: 1;
+  padding: 20px;
+  width: 100px;
+}
+
+@media (max-width: $screenMedium) {
+  .content {
+    display: block;
+  }
+
+  .nav {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid $borderColor;
+
+    ul {
+      display: flex;
+
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 5px;
+        width: calc(100% / #{$navItemsCount});
+        text-align: center;
+
+        + li {
+          border-left: 1px solid $borderColor;
+        }
+      }
+    }
+  }
+
+  .showcase {
+    width: 100%;
+  }
+}
