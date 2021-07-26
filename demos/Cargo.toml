@@ -3,10 +3,9 @@ name = "demos"
 version = "0.1.0"
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [profile.dev]
 codegen-units = 4 
-debug = 1 # required for line numbers in tests, see tikv #5049
+debug = 1
 debug-assertions = true 
 incremental = true 
 lto = false 
@@ -34,3 +33,10 @@ futures = "0.3.15"
 rand = "0.8.3"
 serde_json = "1.0"
 csv = "1.1"
+tonic = "0.5"
+prost = "0.8"
+tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
+lazy_static = "1.4.0"
+
+[build-dependencies]
+tonic-build = "0.5"

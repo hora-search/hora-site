@@ -1,7 +1,5 @@
 use actix_web::{get, web, App, HttpResponse, HttpServer, Result};
 
-
-
 use hora::core::ann_index::ANNIndex;
 
 use rand::{thread_rng, Rng};
@@ -9,13 +7,25 @@ use serde::{Deserialize, Serialize};
 
 use std::collections::HashMap;
 
+use embedding::embeder_client::EmbederClient;
+use embedding::EmbedRequest;
+use std::collections::HashSet;
 use std::fs::File;
 use std::io::Read;
+#[macro_use]
+extern crate lazy_static;
 
+pub mod embedding {
+    tonic::include_proto!("embedding");
+}
 
-static wine: &str = "wine";
-static celebrity: &str = "celebrity";
-static demo_prefix: &str = "/demos/public/";
+static WINE: &str = "wine";
+static CELEBRITY: &str = "celebrity";
+static DEMO_PREFIX: &str = "/demos/public/";
+
+lazy_static! {
+    static ref SERVING_DATA: web::Data<ServingData> = prepare_data();
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct WineReviewsSearchItem {
@@ -25,6 +35,12 @@ struct WineReviewsSearchItem {
     description: String,
     designation: String,
     province: String,
+    price: f32,
+    region_1: String,
+    region_2: String,
+    points: usize,
+    variety: String,
+    winery: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -50,6 +66,11 @@ struct SearchQuery {
     query: String,
 }
 
+#[derive(Deserialize)]
+struct SearchWine {
+    description: String,
+}
+
 #[derive(Clone, Debug)]
 struct PicItem {
     pic_name: String,
@@ -65,6 +86,13 @@ struct WineReviewsItem {
     designation: String,
     province: String,
     embedding: String,
+    price: Option<f32>,
+    region_1: String,
+    region_2: String,
+    #[serde(default)]
+    points: usize,
+    variety: String,
+    winery: String,
 }
 
 struct ServingData {
@@ -76,13 +104,16 @@ struct ServingData {
     celebrity_key_list: Vec<String>,
     cats_data: HashMap<String, PicItem>,
     cats_key_list: Vec<String>,
+
+    rt: tokio::runtime::Runtime,
 }
 
 fn prepare_data() -> web::Data<ServingData> {
+    println!("start preparing data");
     let mut indices: HashMap<String, Box<hora::index::hnsw_idx::HNSWIndex<f32, String>>> =
         HashMap::new();
     indices.insert(
-        celebrity.to_string(),
+        CELEBRITY.to_string(),
         Box::new(hora::index::hnsw_idx::HNSWIndex::<f32, String>::new(
             128,
             &hora::index::hnsw_params::HNSWParams::<f32>::default(),
@@ -90,7 +121,7 @@ fn prepare_data() -> web::Data<ServingData> {
     );
 
     indices.insert(
-        wine.to_string(),
+        WINE.to_string(),
         Box::new(hora::index::hnsw_idx::HNSWIndex::<f32, String>::new(
             768,
             &hora::index::hnsw_params::HNSWParams::<f32>::default(),
@@ -118,19 +149,20 @@ fn prepare_data() -> web::Data<ServingData> {
         );
         celebrity_key_list.push(x.pic_name.clone());
         indices
-            .get_mut(celebrity)
+            .get_mut(CELEBRITY)
             .unwrap()
             .add(&x.embedding, x.pic_name.clone())
             .unwrap();
     });
     println!("start build {:?} point", celebrity_key_list.len());
     indices
-        .get_mut(celebrity)
+        .get_mut(CELEBRITY)
         .unwrap()
-        .build(hora::core::metrics::Metric::Euclidean);
+        .build(hora::core::metrics::Metric::Euclidean)
+        .unwrap();
 
     // wine
-    let filename = "winemag-data_first150k_processed.csv";
+    let filename = "demo.csv";
     let wine_file = File::open(filename).unwrap();
     let mut rdr = csv::Reader::from_reader(wine_file);
     let mut wine_reviews_key_list = Vec::new();
@@ -143,11 +175,15 @@ fn prepare_data() -> web::Data<ServingData> {
         let temp: Vec<f32> = serde_json::from_str(&record.embedding).unwrap();
         let id = record.id.clone();
         indices
-            .get_mut(wine)
+            .get_mut(WINE)
             .unwrap()
             .add(&temp.clone(), id.clone())
             .unwrap();
 
+        let price = match record.price {
+            Some(p) => p,
+            None => 0.0,
+        };
         wine_data.insert(
             record.id.clone(),
             WineReviewsSearchItem {
@@ -157,6 +193,12 @@ fn prepare_data() -> web::Data<ServingData> {
                 description: record.description,
                 designation: record.designation,
                 province: record.province,
+                price: price,
+                region_1: record.region_1,
+                region_2: record.region_2,
+                points: record.points,
+                variety: record.variety,
+                winery: record.winery,
             },
         );
         wine_reviews_key_list.push(id);
@@ -164,9 +206,10 @@ fn prepare_data() -> web::Data<ServingData> {
     println!("start build {:?} point", wine_reviews_key_list.len());
 
     indices
-        .get_mut(wine)
+        .get_mut(WINE)
         .unwrap()
-        .build(hora::core::metrics::Metric::Euclidean);
+        .build(hora::core::metrics::Metric::Euclidean)
+        .unwrap();
 
     println!("finish preparing");
     web::Data::new(ServingData {
@@ -177,25 +220,23 @@ fn prepare_data() -> web::Data<ServingData> {
         celebrity_key_list,
         cats_data: HashMap::new(),
         cats_key_list: Vec::new(),
+        rt: tokio::runtime::Runtime::new().unwrap(),
     })
 }
 
 #[get("/cat_search")]
-async fn cat_search(
-    query: web::Query<String>,
-    data: web::Data<ServingData>,
-) -> Result<HttpResponse> {
-    static k: usize = 5;
-    match data.cats_data.get(&query.clone()) {
+async fn cat_search(query: web::Query<String>) -> Result<HttpResponse> {
+    static K: usize = 5;
+    match SERVING_DATA.cats_data.get(&query.clone()) {
         Some(item) => {
-            let resp_list = data
+            let resp_list = SERVING_DATA
                 .indices
                 .get("cat")
                 .unwrap()
-                .search(&item.embedding, k)
+                .search(&item.embedding, K)
                 .iter()
                 .map(|x| {
-                    let cat_item = data.cats_data.get(x).unwrap();
+                    let cat_item = SERVING_DATA.cats_data.get(x).unwrap();
                     PicSearchItem {
                         pic_name: cat_item.pic_name.clone(),
                         pic_url: cat_item.pic_url.clone(),
@@ -212,12 +253,12 @@ async fn cat_search(
 
 #[get("/cat_random")]
 async fn cat_random(data: web::Data<ServingData>) -> Result<HttpResponse> {
-    static k: usize = 5;
+    static K: usize = 5;
     let mut rng = thread_rng();
-    let resp_list = (0..k)
+    let resp_list = (0..K)
         .map(|_| {
             let n: usize = rng.gen_range(0..data.cats_key_list.len());
-            let cat_item = data.cats_data.get(&data.cats_key_list[n]).unwrap();
+            let cat_item = SERVING_DATA.cats_data.get(&data.cats_key_list[n]).unwrap();
             PicSearchItem {
                 pic_name: cat_item.pic_name.clone(),
                 pic_url: cat_item.pic_url.clone(),
@@ -229,19 +270,19 @@ async fn cat_random(data: web::Data<ServingData>) -> Result<HttpResponse> {
 }
 
 #[get("/celebrity_random")]
-async fn celebrity_random(data: web::Data<ServingData>) -> Result<HttpResponse> {
-    static k: usize = 5;
+async fn celebrity_random() -> Result<HttpResponse> {
+    static K: usize = 5;
     let mut rng = thread_rng();
-    let resp_list = (0..k)
+    let resp_list = (0..K)
         .map(|_| {
-            let n: usize = rng.gen_range(0..data.celebrity_key_list.len());
-            let celebrity_item = data
+            let n: usize = rng.gen_range(0..SERVING_DATA.celebrity_key_list.len());
+            let celebrity_item = SERVING_DATA
                 .celebrity_data
-                .get(&data.celebrity_key_list[n])
+                .get(&SERVING_DATA.celebrity_key_list[n])
                 .unwrap();
             PicSearchItem {
                 pic_name: celebrity_item.pic_name.clone(),
-                pic_url: demo_prefix.to_owned() + &celebrity_item.pic_name,
+                pic_url: DEMO_PREFIX.to_owned() + &celebrity_item.pic_name,
                 embedding: celebrity_item.embedding.clone(),
             }
         })
@@ -250,24 +291,21 @@ async fn celebrity_random(data: web::Data<ServingData>) -> Result<HttpResponse> 
 }
 
 #[get("/celebrity_search")]
-async fn celebrity_search(
-    query: web::Query<SearchQuery>,
-    data: web::Data<ServingData>,
-) -> Result<HttpResponse> {
-    static k: usize = 5;
-    match data.celebrity_data.get(&query.query.clone()) {
+async fn celebrity_search(query: web::Query<SearchQuery>) -> Result<HttpResponse> {
+    static K: usize = 5;
+    match SERVING_DATA.celebrity_data.get(&query.query.clone()) {
         Some(item) => {
-            let resp_list = data
+            let resp_list = SERVING_DATA
                 .indices
-                .get(celebrity)
+                .get(CELEBRITY)
                 .unwrap()
-                .search(&item.embedding, k)
+                .search(&item.embedding, K)
                 .iter()
                 .map(|x| {
-                    let celebrity_item = data.celebrity_data.get(x).unwrap();
+                    let celebrity_item = SERVING_DATA.celebrity_data.get(x).unwrap();
                     PicSearchItem {
                         pic_name: celebrity_item.pic_name.clone(),
-                        pic_url: demo_prefix.to_owned() + &celebrity_item.pic_name,
+                        pic_url: DEMO_PREFIX.to_owned() + &celebrity_item.pic_name,
                         embedding: celebrity_item.embedding.clone(),
                     }
                 })
@@ -280,46 +318,44 @@ async fn celebrity_search(
 }
 
 #[get("/wine_search")]
-async fn wine_search(
-    query: web::Query<SearchQuery>,
-    data: web::Data<ServingData>,
-) -> Result<HttpResponse> {
-    static k: usize = 5;
-    match data.wine_reviews_data.get(&query.query.clone()) {
-        Some(item) => {
-            let resp_list = data
-                .indices
-                .get(wine)
-                .unwrap()
-                .search(&item.embedding, k)
-                .iter()
-                .map(|x| {
-                    let wine_item = data.wine_reviews_data.get(x).unwrap();
-                    wine_item.clone()
-                })
-                .collect::<Vec<WineReviewsSearchItem>>();
+async fn wine_search(query: web::Query<SearchWine>) -> Result<HttpResponse> {
+    static K: usize = 10;
+    static FINAL_K: usize = 5;
 
-            Ok(HttpResponse::Ok().json(WineReviewsSearchResp { resp: resp_list }))
-        }
-        None => Ok(HttpResponse::NotFound().finish()),
+    if query.description.is_empty() || query.description.len() > 150 {
+        return Ok(HttpResponse::BadRequest().finish());
     }
-}
 
-#[get("/wine_random")]
-async fn wine_random(data: web::Data<ServingData>) -> Result<HttpResponse> {
-    static k: usize = 5;
-    let mut rng = thread_rng();
-    let resp_list = (0..k)
-        .map(|_| {
-            let n: usize = rng.gen_range(0..data.wine_reviews_key_list.len());
-            let wine_item = data
-                .wine_reviews_data
-                .get(&data.wine_reviews_key_list[n])
-                .unwrap();
+    let resp_list = SERVING_DATA
+        .indices
+        .get(WINE)
+        .unwrap()
+        .search(&embed(&query.description, &SERVING_DATA.rt), K)
+        .iter()
+        .map(|x| {
+            let wine_item = SERVING_DATA.wine_reviews_data.get(x).unwrap();
             wine_item.clone()
         })
         .collect::<Vec<WineReviewsSearchItem>>();
-    Ok(HttpResponse::Ok().json(WineReviewsSearchResp { resp: resp_list }))
+
+    let mut final_resp_list: Vec<WineReviewsSearchItem> = Vec::with_capacity(FINAL_K);
+    let mut description_set: HashSet<String> = HashSet::new();
+    resp_list.iter().for_each(|x| {
+        if description_set.contains(&x.description) {
+            return;
+        }
+        description_set.insert(x.description.clone());
+        final_resp_list.push(x.clone());
+    });
+    if final_resp_list.len() > FINAL_K {
+        final_resp_list = final_resp_list[..FINAL_K].to_vec();
+    } else {
+        final_resp_list = resp_list[..FINAL_K].to_vec();
+    }
+
+    Ok(HttpResponse::Ok().json(WineReviewsSearchResp {
+        resp: final_resp_list,
+    }))
 }
 
 #[actix_web::main]
@@ -327,17 +363,29 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new().service(
             web::scope("/demos")
-                .app_data(prepare_data())
                 // .service(cat_search)
                 .service(celebrity_search)
                 .service(celebrity_random)
                 // .service(cat_random)
-                .service(wine_random)
                 .service(wine_search),
         )
     })
-    .workers(1)
+    .workers(2)
     .bind("0.0.0.0:8080")?
     .run()
     .await
+}
+
+async fn async_embed(description: &str) -> Vec<f32> {
+    let mut embed_client = EmbederClient::connect("http://[::1]:50051").await.unwrap();
+    let request = tonic::Request::new(EmbedRequest {
+        value: description.to_string(),
+    });
+    let response = embed_client.embed(request).await.unwrap();
+
+    response.into_inner().embedding
+}
+
+fn embed(description: &str, rt: &tokio::runtime::Runtime) -> Vec<f32> {
+    rt.block_on(async_embed(description))
 }

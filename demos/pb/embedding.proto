@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package embedding;
+
+// The greeting service definition.
+service Embeder {
+  // Sends a greeting
+  rpc Embed (EmbedRequest) returns (EmbedReply) {}
+}
+
+// The request message containing the user's name.
+message EmbedRequest {
+  string value = 1;
+}
+
+// The response message containing the greetings
+message EmbedReply {
+  repeated float embedding = 1;
+}
