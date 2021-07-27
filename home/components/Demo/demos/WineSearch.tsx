@@ -66,9 +66,9 @@ const WineSearch = (): JSX.Element => {
       <div className={c.wineItem} key={data.id}>
         <p className={c.wineDesc}>{data.description}</p>
         <div className={c.wineFooter}>
-          <span className={c.wineDesign}>🍷{data.variety}</span>
+          <span className={c.wineDesign}>🍷 {data.winery}</span>
           <span className={c.wineDesign}>{data.designation}</span>
-          <span className={c.wineDesign}>{data.winery}</span>
+          <span className={c.wineDesign}>{data.variety}</span>
           <span className={c.wineDesign}>${data.price}</span>
           <span>{data.country}</span>
           <span>{data.province}</span>
