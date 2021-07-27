@@ -60,13 +60,14 @@ const features: { title: string; desc: React.ReactNode; img?: string }[] = [
     ),
   },
   {
-    title: 'Multiple Languages Support☄️',
+    title: 'Multiple Languages Support✨ ',
     desc: (
       <ul>
         <li>Rust</li>
         <li>Python</li>
         <li>Nodejs</li>
-        <li>Java</li>
+        <li>Java(WIP)</li>
+        <li>Ruby(WIP)</li>
         <li>Golang(WIP)</li>
         <li>Swift(WIP)</li>
         <li>Julia(WIP)</li>
@@ -78,10 +79,10 @@ const features: { title: string; desc: React.ReactNode; img?: string }[] = [
     title: 'Multiple Indexes Support 🚀',
     desc: (
       <ul>
-        <li>Hierarchical Navigable Small World Graph Index(HNSW)</li>
-        <li>Satellite System Graph (SSG)</li>
-        <li>Product Quantization Inverted File(PQIVF)</li>
-        <li>Random Projection Tree(RPT)</li>
+        <li>Hierarchical Navigable Small World Graph Index(<strong>HNSW</strong>)</li>
+        <li>Satellite System Graph (<strong>SSG</strong>)</li>
+        <li>Product Quantization Inverted File(<strong>PQIVF</strong>)</li>
+        <li>Random Projection Tree(<strong>RPT</strong>)</li>
         <li>BruteForce (naive implementation with SIMD)</li>
       </ul>
     ),

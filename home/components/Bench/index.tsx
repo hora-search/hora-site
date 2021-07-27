@@ -15,7 +15,7 @@ const Bench = (): JSX.Element => (
       </div>
       <div className={c.container}>
         <p className={c.instrument}>
-          by <strong>AWS t2.medium (CPU: Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz)</strong> [<a className={c.link} href="https://github.com/hora-search/ann-benchmarks">more information</a>]
+          by <strong>AWS t2.medium (CPU: Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz)</strong> [<a className={c.link} href="https://github.com/hora-search/ann-benchmarks">more info</a>]
         </p>
       </div>
     </div>
