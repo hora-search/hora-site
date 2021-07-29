@@ -8,7 +8,7 @@ import c from './style.module.scss';
 
 const links: { text: string; href: string }[] = [
   { text: 'GitHub', href: 'https://github.com/hora-search/hora' },
-  { text: 'Documentation', href: '/doc' },
+  { text: 'Document', href: '/doc' },
 ];
 
 const NavBar = (): JSX.Element => {

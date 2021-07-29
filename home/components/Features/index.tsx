@@ -33,7 +33,7 @@ const features: { title: string; desc: React.ReactNode; img?: string }[] = [
       <ul>
         <li>Rust compiler secure all code</li>
         <li>
-          Memory managed by Rust for all language libs such as <em>Python lib</em>
+          Memory managed by Rust for all language libs such as <em>horapy</em>
         </li>
         <li>Broad testing coverage</li>
         <li>Well documented</li>
@@ -47,14 +47,14 @@ const features: { title: string; desc: React.ReactNode; img?: string }[] = [
       <ul>
         <li>
           <strong>
-            SIMD-Accelerated (<em>packed_simd</em>)
+            SIMD-Accelerated (<em><a className={c.feature_link} href="https://github.com/rust-lang/packed_simd">packed_simd</a></em>)
           </strong>
         </li>
         <li>
           <strong>Stable algorithm implementation</strong>
         </li>
         <li>
-          <strong>Multiple threads design</strong>
+          Multiple threads design
         </li>
       </ul>
     ),
@@ -63,15 +63,15 @@ const features: { title: string; desc: React.ReactNode; img?: string }[] = [
     title: 'Multiple Languages Support✨ ',
     desc: (
       <ul>
-        <li>Rust</li>
-        <li>Python</li>
-        <li>Nodejs</li>
-        <li>Java(WIP)</li>
-        <li>Ruby(WIP)</li>
-        <li>Golang(WIP)</li>
-        <li>Swift(WIP)</li>
-        <li>Julia(WIP)</li>
-        <li>R(WIP)</li>
+        <li><a className={c.feature_link} href="https://github.com/hora-search/hora">Rust</a></li>
+        <li><a className={c.feature_link} href="https://github.com/hora-search/horapy">Python</a></li>
+        <li><a className={c.feature_link} href="https://github.com/hora-search/hora-wasm">Nodejs</a></li>
+        <li><a className={c.feature_link} href="https://github.com/hora-search/hora-java">Java (WIP)</a></li>
+        <li>Ruby (WIP)</li>
+        <li>Golang (WIP)</li>
+        <li>Swift (WIP)</li>
+        <li>Julia (WIP)</li>
+        <li>R (WIP)</li>
       </ul>
     ),
   },
@@ -79,11 +79,11 @@ const features: { title: string; desc: React.ReactNode; img?: string }[] = [
     title: 'Multiple Indexes Support 🚀',
     desc: (
       <ul>
-        <li>Hierarchical Navigable Small World Graph Index(<strong>HNSW</strong>)</li>
-        <li>Satellite System Graph (<strong>SSG</strong>)</li>
-        <li>Product Quantization Inverted File(<strong>PQIVF</strong>)</li>
-        <li>Random Projection Tree(<strong>RPT</strong>)</li>
-        <li>BruteForce (naive implementation with SIMD)</li>
+        <li>Hierarchical Navigable Small World Graph Index (<a className={c.feature_link} href="https://arxiv.org/abs/1603.09320"><strong>HNSW</strong></a>)</li>
+        <li>Satellite System Graph (<a className={c.feature_link} href="https://arxiv.org/abs/1907.06146"><strong>SSG</strong></a>)</li>
+        <li>Product Quantization Inverted File (<a className={c.feature_link} href="https://lear.inrialpes.fr/pubs/2011/JDS11/jegou_searching_with_quantization.pdf"><strong>PQIVF</strong></a>)</li>
+        <li>Random Projection Tree (<a className={c.feature_link} href="https://en.wikipedia.org/wiki/Random_projection"><strong>RPT</strong></a>)</li>
+        <li>BruteForce (naive implementation with SIMD accelerated)</li>
       </ul>
     ),
   },
