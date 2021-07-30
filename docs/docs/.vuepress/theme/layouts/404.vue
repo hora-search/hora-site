@@ -5,9 +5,9 @@
 
       <blockquote>{{ getMsg() }}</blockquote>
 
-      <RouterLink to="/">
-        Take me home.
-      </RouterLink>
+      <a link="/doc">
+        Back to docs.
+      </a>
     </div>
   </div>
 </template>
