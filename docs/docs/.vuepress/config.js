@@ -44,7 +44,7 @@ module.exports = (ctx) => ({
     ['meta', { name: 'msapplication-TileImage', content: '/icons/msapplication-icon-144x144.png' }],
     ['meta', { name: 'msapplication-TileColor', content: '#000000' }],
   ],
-  theme: '@vuepress/vue',
+  theme: '@vuepress/default',
   themeConfig: {
     repo: 'hora-search/hora',
     editLinks: true,
