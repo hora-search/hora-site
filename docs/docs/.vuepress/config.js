@@ -21,19 +21,6 @@ module.exports = (ctx) => ({
   
     gtag('config', 'G-ZCQDT118MM');`,
     ],
-    [
-      'script',
-      {},
-      `(() => { 
-        var script = document.createElement("script"); 
-        script.innerHTML = \`var header = document.querySelector('.home-link');
-        if (header) {
-          header.href = 'https://horasearch.com/';
-        }\`;
-        setTimeout(() => document.body.append(script),0);
-        })();
-      `,
-    ],
     ['link', { rel: 'icon', href: `/logo.png` }],
     ['link', { rel: 'manifest', href: '/manifest.json' }],
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],
