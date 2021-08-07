@@ -13,10 +13,13 @@ const features: { title: string; desc: React.ReactNode; img?: string }[] = [
     desc: (
       <ul>
         <li>
-          Support <em>no_std</em> (WIP, not all features)
+          Support <em>WebAssembly</em>
         </li>
         <li>
           Support <em>Windows</em>, <em>Linux</em> and <em>OS X</em>
+        </li>
+        <li>
+          Support <em>no_std</em> (WIP, not all features)
         </li>
         <li>
           Support <em>IOS</em> and <em>Android</em>  (WIP)

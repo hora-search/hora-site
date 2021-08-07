@@ -15,6 +15,7 @@ const languageGuides: { title: string; lang: string; lines: string[] }[] = [
     title: 'Python',
     lang: 'python',
     lines: `$ pip install horapy # recommend
+
 # or install from source
 $ git clone https://github.com/hora-search/horapy && cd horapy
 $ pip install maturin && maturin build --release`.split('\n'),
@@ -22,12 +23,12 @@ $ pip install maturin && maturin build --release`.split('\n'),
   {
     title: 'Rust',
     lang: 'rust',
-    lines: ['[dependencies]', 'hora = "0.1.0"'],
+    lines: ['[dependencies]', 'hora = "0.1"'],
   },
   {
     title: 'Javascript',
     lang: 'js',
-    lines: ['npm install hora'],
+    lines: ['npm i horajs'],
   },
   {
     title: 'Build From Source',
