@@ -21,19 +21,6 @@ module.exports = (ctx) => ({
   
     gtag('config', 'G-ZCQDT118MM');`,
     ],
-    [
-      'script',
-      {},
-      `(() => { 
-        var script = document.createElement("script"); 
-        script.innerHTML = \`var header = document.querySelector('.home-link');
-        if (header) {
-          header.href = 'https://horasearch.com/';
-        }\`;
-        setTimeout(() => document.body.append(script),0);
-        })();
-      `,
-    ],
     ['link', { rel: 'icon', href: `/logo.png` }],
     ['link', { rel: 'manifest', href: '/manifest.json' }],
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],
@@ -44,7 +31,7 @@ module.exports = (ctx) => ({
     ['meta', { name: 'msapplication-TileImage', content: '/icons/msapplication-icon-144x144.png' }],
     ['meta', { name: 'msapplication-TileColor', content: '#000000' }],
   ],
-  theme: '@vuepress/vue',
+  theme: '@vuepress/default',
   themeConfig: {
     repo: 'hora-search/hora',
     editLinks: true,
