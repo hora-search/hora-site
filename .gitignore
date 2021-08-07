@@ -11,3 +11,5 @@ Cargo.lock
 demos/Cargo.lock
 demos/target
 *.json
+.DS_Store
+.csv
